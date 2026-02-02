@@ -1,0 +1,10 @@
+src/
+├── App.js          ← Main component (start here!)
+├── App.css         ← Styles for App component
+├── index.js        ← Entry point (rarely touch)
+├── index.css       ← Global styles
+└── App.test.js     ← Tests (we'll use later)
+
+public/
+├── index.html      ← The single HTML page
+└── favicon.ico     ← Browser tab icon
