@@ -8,3 +8,9 @@ src/
 public/
 ├── index.html      ← The single HTML page
 └── favicon.ico     ← Browser tab icon
+
+
+Rules
+- component names must start with a capital letter
+- each component needs to be its own file 
+- 
