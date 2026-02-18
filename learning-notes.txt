@@ -1,16 +1,38 @@
-src/
-├── App.js          ← Main component (start here!)
-├── App.css         ← Styles for App component
-├── index.js        ← Entry point (rarely touch)
-├── index.css       ← Global styles
-└── App.test.js     ← Tests (we'll use later)
-
-public/
-├── index.html      ← The single HTML page
-└── favicon.ico     ← Browser tab icon
-
-
-Rules
-- component names must start with a capital letter
-- each component needs to be its own file 
-- 
+my-app/
+│
+├── public/                        ← Static assets served directly (don't touch often)
+│   └── index.html                 ← The ONE html file in your whole app. React injects into it.
+│
+├── src/                           ← Everything you write lives here
+│   │
+│   ├── assets/                    ← Images, fonts, logos — static files your code imports
+│   │   └── logo.png
+│   │
+│   ├── components/                ← Reusable UI pieces used across multiple pages
+│   │   ├── Header/
+│   │   │   ├── Header.jsx         ← The component logic + JSX
+│   │   │   └── Header.module.css  ← CSS that belongs ONLY to Header (CSS Modules)
+│   │   └── Footer/
+│   │       ├── Footer.jsx
+│   │       └── Footer.module.css
+│   │
+│   ├── pages/                     ← One folder per page/route in your app
+│   │   ├── Home/
+│   │   │   ├── Home.jsx
+│   │   │   └── Home.module.css
+│   │   └── About/
+│   │       ├── About.jsx
+│   │       └── About.module.css
+│   │
+│   ├── styles/                    ← Global styles that apply everywhere
+│   │   └── global.css             ← Resets, fonts, CSS variables (colors, spacing)
+│   │
+│   ├── firebase/                  ← Firebase config (you'll fill this in later)
+│   │   └── config.js
+│   │
+│   ├── App.jsx                    ← Root component — wires pages + layout together
+│   └── index.js                   ← Entry point — mounts <App /> into index.html
+│
+├── .env                           ← Secret keys (Firebase etc.) — NEVER commit this
+├── .gitignore                     ← Tells git what NOT to track (.env lives here)
+└── package.json                   ← Project metadata + your npm dependencies
