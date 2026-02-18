@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 // Import global styles ONCE here. They apply to the whole app.
-import './index.css';
-import './typography.css';
+import './styles/index.css';
+import './styles/typography.css';
 
 
 import App from './App';

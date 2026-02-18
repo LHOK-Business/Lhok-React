@@ -23,7 +23,7 @@ import { HashRouter, Routes, Route } from 'react-router-dom';
 
 // Layout components (always visible)
 import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
+// import Footer from './components/Footer/Footer';
 
 // Pages (only one visible at a time based on URL)
 import About   from './pages/About/About';
@@ -34,6 +34,7 @@ function App() {
     return (
         <HashRouter>
             <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+
             <Header />
 
             <Routes>
@@ -42,7 +43,8 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             </Routes>
 
-            <Footer />
+            {/* <Footer /> */}
+            
             </div>
         </HashRouter>
     );
