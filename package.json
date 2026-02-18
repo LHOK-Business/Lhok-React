@@ -1,9 +1,5 @@
 {
-  "name": "lhok-react",
-  "homepage": "https://lhok-business.github.io/Lhok-React/"
-}
-
-{
+  "homepage": "https://lhok-business.github.io/Lhok-React/",
   "name": "lhok-react",
   "version": "0.1.0",
   "private": true,
