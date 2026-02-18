@@ -25,7 +25,7 @@ import './App.css';
 // export default App;
 
 function App() {
-  const platformName = "Professional Profile Hub";
+  const platformName = "Lhok";
 
   return (
     <div className="App">
