@@ -68,10 +68,6 @@ body {
     height: 100%;
     min-height: 100vh;
     
-    /* Account for fixed header and footer */
-    padding-top: var(--header-height);
-    padding-bottom: var(--footer-height);
-    
     /* Visual */
     background-color: var(--color-background);
     
@@ -188,4 +184,11 @@ body {
     /* --breakpoint-md: 768px; */
     /* --breakpoint-lg: 992px; */
     /* --breakpoint-xl: 1200px; */
+}
+
+/* Make the React root div fill the full body height */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }

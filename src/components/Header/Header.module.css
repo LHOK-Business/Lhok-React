@@ -21,14 +21,12 @@
 
   /* Purple gradient matching your brand screenshots */
   background: linear-gradient(
-    135deg,
-    var(--color-primary-dark) 0%,
-    var(--color-primary)      40%,
-    #d488da                   75%,
-    #f0d4f2                   100%
+  to bottom,
+  var(--color-primary)      1%,
+  var(--color-white) 100%
   );
 
-  box-shadow: var(--shadow-md);
+
 }
 
 

@@ -1,1 +1,125 @@
-/*  this will be specific to theheader */
+/* ============================================
+   Footer.module.css
+   Scoped styles for the site Footer.
+   References global variables from index.css — never hardcodes colors or spacing.
+   ============================================ */
+
+
+/* ── OUTER FOOTER ─────────────────────────────────────────────
+   Gradient is FLIPPED from the header:
+   Header: dark purple top-left → light bottom-right
+   Footer: light top → dark purple bottom
+   This creates a visual "bookend" effect on the page.
+   ────────────────────────────────────────────────────────────*/
+.footer {
+background: linear-gradient(
+  to top,
+  var(--color-primary)      1%,
+  var(--color-white) 100%
+);
+
+  /* padding-bottom accounts for --footer-height set on body in index.css */
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-lg);
+}
+
+
+
+/* ── INNER CONTAINER ──────────────────────────────────────────
+   Two rows:
+     Row 1: nav link columns (left) + copyright (right)
+     We use flexbox with space-between to push them apart.
+   ────────────────────────────────────────────────────────────*/
+.container {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+
+  display: flex;
+  align-items: flex-start;      /* align to top of row */
+  justify-content: space-between;
+}
+
+
+/* ── NAV COLUMNS WRAPPER ──────────────────────────────────────
+   Holds the three link columns side by side.
+   ────────────────────────────────────────────────────────────*/
+.navColumns {
+  display: flex;
+  gap: var(--spacing-xl);
+}
+
+
+/* ── INDIVIDUAL COLUMN ────────────────────────────────────────*/
+.navColumn {
+  display: flex;
+  flex-direction: column;  /* stack links vertically */
+  gap: var(--spacing-sm);
+}
+
+
+/* ── NAV LINKS ────────────────────────────────────────────────
+   Same pill hover effect as the header for consistency.
+   White text, frosted pill on hover.
+   ────────────────────────────────────────────────────────────*/
+.navLink {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+
+  /* Pill hover — same pattern as Header */
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid transparent;
+
+  transition:
+    background-color var(--transition-speed-fast) var(--transition-easing),
+    border-color     var(--transition-speed-fast) var(--transition-easing);
+
+  white-space: nowrap;
+}
+
+.navLink:hover {
+  background-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: var(--color-white);
+  text-decoration: none;  /* override global a:hover underline */
+}
+
+
+/* ── COPYRIGHT ────────────────────────────────────────────────
+   Sits at the right end of the flex row, aligned to top.
+   ────────────────────────────────────────────────────────────*/
+.copyright {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-white);
+  white-space: nowrap;
+
+  /* Nudge it down slightly so it aligns with the first link row */
+  padding-top: var(--spacing-xs);
+}
+
+
+/* ── RESPONSIVE ───────────────────────────────────────────────
+   Below 768px: stack columns vertically, copyright below
+   ────────────────────────────────────────────────────────────*/
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    align-items: center;
+    text-align: center;
+  }
+
+  .navColumns {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  .navColumn {
+    align-items: center;
+  }
+}

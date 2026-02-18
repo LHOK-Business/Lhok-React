@@ -66,6 +66,7 @@ function Header() {
               Replace the text "LHOK" with:
               <img src={logo} alt="LHOK" className={styles.logoImage} />
           */}
+
           <Link to="/" className={styles.logoLink}>
             {/* Swap this <span> for your <img> once you import the logo */}
             <span style={{
@@ -75,7 +76,7 @@ function Header() {
               color: 'var(--color-white)',
               letterSpacing: '0.15em',
             }}>
-              LHOK
+              <img src={logo} alt="LHOK" className={styles.logoImage} />
             </span>
           </Link>
 
