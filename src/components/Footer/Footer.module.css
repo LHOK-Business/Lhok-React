@@ -6,7 +6,7 @@
   background: linear-gradient(
     to top,
     var(--color-primary)  1%,
-    var(--color-white)    100%
+    var(--color-white)    70%
   );
   box-shadow: var(--shadow-md);
   padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-lg);
