@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 
 // Import global styles ONCE here. They apply to the whole app.
 import './index.css';
-import './typo.css';
+import './typography.css';
 
 
 import App from './App';
