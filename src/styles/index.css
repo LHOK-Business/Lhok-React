@@ -1,22 +1,191 @@
 /* use for global variables ect */
+/* ─────────────────────────────────────────────────────────────
+   CSS RESET
+   The browser has its own opinions about margins, padding,
+   bullet sizes, heading weights, etc. This wipes them out.
+   ───────────────────────────────────────────────────────────── */
 
-
-body {
+*,
+*::before,
+*::after {
+  /* box-sizing: border-box means padding/border are INCLUDED in
+     an element's width — much more intuitive to work with */
+  box-sizing: border-box;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
 }
 
+/* Remove list bullets by default — add them back when you need them */
+ul, ol {
+  list-style: none;
+}
+
+/* Make images behave — never overflow their container */
+img, video {
+  max-width: 100%;
+  display: block;
+}
+
+/* Remove default button styling — we'll style buttons ourselves */
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit; /* buttons don't inherit font by default — this fixes that */
+}
+
+/* Remove default link underline — we style links ourselves */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ============================================
+  Placeholder, ask what this is
+    ============================================ */
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
-:root {
+/* ─────────────────────────────────────────────────────────────
+  Design Tokens (this is what we edit for branding) 
+   ───────────────────────────────────────────────────────────── */
 
-/* paste in variables from vanilla */
-/* h1, h2, h3? links? */
+body {
+   margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+    display: flex;
+    flex-direction: column;
+    /* Typography */
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-body);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    
+    /* Layout */
+    height: 100%;
+    min-height: 100vh;
+    
+    /* Account for fixed header and footer */
+    padding-top: var(--header-height);
+    padding-bottom: var(--footer-height);
+    
+    /* Visual */
+    background-color: var(--color-background);
+    
+    /* Text */
+    text-align: center; /* Default center alignment - override in components */
+    flex: 1;
+}
+
+
+
+
+:root {
+    /* ============================================
+       COLORS
+       ============================================ x:var(-- lets you search the color you want */
+    --color-primary: #b54dbc;
+    --color-primary-dark: #9a3ea3;
+    
+    --color-secondary: #333333;
+    --color-secondary-dark: #333333;
+
+    --color-white: #ffffff;
+    --color-gray-dark: #333333;
+    --color-gray-medium: #666666;
+    --color-gray-light: #e0e0e0;
+    
+    /* Semantic color names */
+    --color-text-primary: var(--color-secondary);
+    --color-text-secondary: var(--color-secondary-dark);
+
+    --color-background: var(--color-white);
+    --color-link: var(--color-primary);
+    --color-link-hover: var(--color-white);
+    
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+       /* Headers */
+    --font-family-primary: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      /* paragraph, normal text, links */
+    --font-family-secondary: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    
+    
+    /* Font sizes - using rem for accessibility */
+    --font-size-title: 2rem;        /* 32px */
+    --font-size-subheading: 1.5rem; /* 24px */
+    --font-size-body: 1rem;         /* 16px */
+    --font-size-small: 0.875rem;    /* 14px */
+    --font-size-tiny: 0.75rem;      /* 12px */
+   
+    /* Font weights */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 600;
+    
+    /* ============================================
+       SPACING
+       ============================================ */
+    --spacing-xs: 0.25rem;   /* 4px */
+    --spacing-sm: 0.5rem;    /* 8px */
+    --spacing-md: 1rem;      /* 16px */
+    --spacing-lg: 1.5rem;    /* 24px */
+    --spacing-xl: 2rem;      /* 32px */
+    
+    /* ============================================
+       LAYOUT
+       ============================================ */
+    --header-height: 100px;
+    --footer-height: 100px;
+    --max-content-width: 1200px;
+    
+    /* Logo dimensions */
+    --logo-height-header: 75px;
+    --logo-height-footer: 60px;
+    
+    /* ============================================
+       BORDERS & RADIUS
+       ============================================ */
+    --border-radius-sm: 3px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    
+    --border-width: 2px;
+    
+    /* ============================================
+       TRANSITIONS & ANIMATIONS
+       ============================================ */
+    --transition-speed-fast: 0.15s;
+    --transition-speed-normal: 0.10s;
+    --transition-speed-slow: 0.5s;
+    --transition-easing: ease;
+    
+    /* ============================================
+       SHADOWS
+       ============================================ */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.15);
+    
+    /* ============================================
+       Z-INDEX SCALE
+       ============================================ */
+    --z-index-base: 1;
+    --z-index-dropdown: 100;
+    --z-index-sticky: 500;
+    --z-index-fixed: 1000;
+    --z-index-modal: 2000;
+    --z-index-tooltip: 3000;
+    
+    /* ============================================
+       BREAKPOINTS (for reference in media queries)
+       ============================================ */
+    /* --breakpoint-sm: 576px; */
+    /* --breakpoint-md: 768px; */
+    /* --breakpoint-lg: 992px; */
+    /* --breakpoint-xl: 1200px; */
 }

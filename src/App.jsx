@@ -12,7 +12,6 @@
 //   │   │   └── About     (only on /about)
 //   │   └── Footer        (always visible)
 
-
 import React from 'react';
 
 // React Router — these three work together:
