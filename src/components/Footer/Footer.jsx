@@ -8,7 +8,8 @@ const FOOTER_LINKS = [
   { label: 'About Us',              to: '/about' },
   { label: 'Privacy Policy',        to: '/privacy' },
   { label: 'Terms and Conditions',  to: '/terms' },
-];
+  { label: 'StyleSheet',  to: '/StyleSheet' },
+  ];
 
 function Footer() {
   const currentYear = new Date().getFullYear();

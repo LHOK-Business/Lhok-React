@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '../../components/Button/Button';
 
-function Home() {
+function Template() {
   return (
     <div>
       <h1>Home</h1>
@@ -14,4 +14,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Template;

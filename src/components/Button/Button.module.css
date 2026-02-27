@@ -1,0 +1,56 @@
+/* ─────────────────────────────────────────────────
+   BUTTON — Primary Style
+   All values pull from your global CSS variables.
+   To restyle ALL buttons in the app, edit here.
+   ───────────────────────────────────────────────── */
+
+   .button {
+    /* Color */
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  
+    /* Shape */
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-sm) var(--spacing-lg);
+  
+    /* Text */
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-family-primary);
+  
+    /* Behavior */
+    cursor: pointer;
+    display: inline-block;
+    border: none;
+  
+    /* Smooth hover transition */
+    transition: 
+      background-color var(--transition-speed-fast) var(--transition-easing),
+      box-shadow var(--transition-speed-fast) var(--transition-easing),
+      transform var(--transition-speed-fast) var(--transition-easing);
+  }
+  
+  /* Hover state — slightly darker + lifted shadow */
+  .button:hover:not(:disabled) {
+    background-color: var(--color-primary-dark);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  
+  /* Active state — pressed down feel */
+  .button:active:not(:disabled) {
+    transform: translateY(0px);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  /* Disabled state — visually inactive */
+  .button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Focus ring — accessibility */
+  .button:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }

@@ -29,7 +29,6 @@ img, video {
 /* Remove default button styling — we'll style buttons ourselves */
 button {
   border: none;
-  background: none;
   cursor: pointer;
   font: inherit; /* buttons don't inherit font by default — this fixes that */
 }
@@ -58,6 +57,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
     display: flex;
     flex-direction: column;
+
+    padding-top: var(--header-height); /* pushes ALL page content below the fixed header */
     /* Typography */
     font-family: var(--font-family-primary);
     font-size: var(--font-size-body);
@@ -101,6 +102,9 @@ body {
     --color-background: var(--color-white);
     --color-link: var(--color-primary);
     --color-link-hover: var(--color-white);
+
+    --color-link-visited: var(--color-primary);
+    --color-link-active: var(--color-secondary) ;
     
     /* ============================================
        TYPOGRAPHY
