@@ -1,13 +1,108 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FormInput    from '../../components/FormInput/FormInput';
 import FormTextarea from '../../components/FormTextarea/FormTextarea';
+import FormSelect   from '../../components/FormSelect/FormSelect';
+import Button       from '../../components/Button/Button';
+import styles       from './Contact.module.css';
+
+const SUBJECT_OPTIONS = [
+  { value: 'general',  label: 'General Inquiry' },
+  { value: 'support',  label: 'Support' },
+  { value: 'billing',  label: 'Billing' },
+  { value: 'other',    label: 'Other' },
+];
 
 function Contact() {
+  const [form, setForm] = useState({
+    name: '', email: '', phone: '', subject: '', message: '',
+  });
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (field) => (e) => {
+    setForm(prev => ({ ...prev, [field]: e.target.value }));
+    if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
+  };
+
+  const validate = () => {
+    const newErrors = {};
+    if (!form.name.trim())    newErrors.name    = 'Name is required';
+    if (!form.email.trim())   newErrors.email   = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(form.email))
+                              newErrors.email   = 'Enter a valid email';
+    if (!form.subject)        newErrors.subject = 'Please select a subject';
+    if (!form.message.trim()) newErrors.message = 'Message is required';
+    return newErrors;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newErrors = validate();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    console.log('Form submitted:', form);
+    alert('Message sent! (Firebase coming next)');
+  };
+
   return (
-    <div>
-      <h1>CONTACT TEST</h1>
-      <FormInput label="Test" id="test" value="" onChange={() => {}} />
-      <FormTextarea label="Test" id="test2" value="" onChange={() => {}} />
+    <div className={styles.page}>
+      <div className={styles.card}>
+        <h1 className={styles.title}>Contact Us</h1>
+        <p className={styles.subtitle}>
+          We'd love to hear from you. Fill out the form and we'll get back to you shortly.
+        </p>
+        <form onSubmit={handleSubmit} noValidate className={styles.form}>
+          <FormInput
+            label="Name"
+            id="name"
+            value={form.name}
+            onChange={handleChange('name')}
+            placeholder="Enter your full name"
+            error={errors.name}
+          />
+          <FormInput
+            label="Email"
+            id="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange('email')}
+            placeholder="your.email@example.com"
+            required={true}
+            error={errors.email}
+          />
+          <FormInput
+            label="Phone (Optional)"
+            id="phone"
+            type="tel"
+            value={form.phone}
+            onChange={handleChange('phone')}
+            placeholder="+1 (555) 123-4567"
+          />
+          <FormSelect
+            label="Subject"
+            id="subject"
+            value={form.subject}
+            onChange={handleChange('subject')}
+            options={SUBJECT_OPTIONS}
+            required={true}
+            error={errors.subject}
+          />
+          <FormTextarea
+            label="Message"
+            id="message"
+            value={form.message}
+            onChange={handleChange('message')}
+            placeholder="Tell us what's on your mind..."
+            required={true}
+            maxLength={500}
+            error={errors.message}
+          />
+          <div className={styles.buttonRow}>
+            <Button label="Send Message" type="submit" />
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
