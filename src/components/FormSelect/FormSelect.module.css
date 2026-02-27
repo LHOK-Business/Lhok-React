@@ -49,14 +49,3 @@
   color: #e53e3e;
   margin: 0;
 }
-```
-
----
-
-## Phase 3 — Contact Page
-
-Now create:
-```
-src/pages/Contact/
-    Contact.jsx
-    Contact.module.css
