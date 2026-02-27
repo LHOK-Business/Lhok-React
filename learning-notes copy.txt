@@ -1,0 +1,7 @@
+Side notes
+
+Can I get the following colors into variables
+    - alert/error
+    - warning
+    - success
+    - information

@@ -1,0 +1,44 @@
+/* Full page wrapper — centers the card vertically and horizontally */
+.page {
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+  }
+  
+  /* White card with shadow — matches your screenshot */
+  .card {
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--spacing-xl);
+    width: 100%;
+    max-width: 560px;
+  }
+  
+  .title {
+    text-align: center;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .subtitle {
+    text-align: center;
+    color: var(--color-gray-medium);
+    margin-bottom: var(--spacing-xl);
+    font-size: var(--font-size-small);
+  }
+  
+  /* Form fields stack vertically with consistent gap */
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+  
+  /* Centers the submit button */
+  .buttonRow {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--spacing-sm);
+  }

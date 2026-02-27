@@ -74,11 +74,11 @@ a:hover {
 }
 
 a:visited {
-    color: #800080; /* Consider adding to variables as --color-link-visited */
+    color: var(--color-link-visited);
 }
 
 a:active {
-    color: #ff0000; /* Consider adding to variables as --color-link-active */
+    color: var(--color-link-active);
 }
 
 /* Focus state for accessibility */

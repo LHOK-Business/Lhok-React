@@ -1,8 +1,3 @@
-/* ─────────────────────────────────────────────────
-   FORM INPUT — Reusable field wrapper
-   ───────────────────────────────────────────────── */
-
-/* Outer wrapper — stacks label, input, error vertically */
 .fieldWrapper {
     display: flex;
     flex-direction: column;
@@ -11,7 +6,6 @@
     text-align: left;
   }
   
-  /* Label above the input */
   .label {
     font-family: var(--font-family-primary);
     font-size: var(--font-size-small);
@@ -19,43 +13,50 @@
     color: var(--color-text-primary);
   }
   
-  /* Red asterisk for required fields */
   .required {
     color: var(--color-primary);
     margin-left: var(--spacing-xs);
   }
   
-  /* The input field itself */
-  .input {
+  .textarea {
     width: 100%;
     padding: var(--spacing-sm) var(--spacing-md);
     font-family: var(--font-family-primary);
     font-size: var(--font-size-body);
     color: var(--color-text-primary);
     background-color: var(--color-white);
-  
     border: var(--border-width) solid var(--color-gray-light);
     border-radius: var(--border-radius-md);
-  
+    resize: vertical; /* user can resize vertically only */
     transition: border-color var(--transition-speed-fast) var(--transition-easing),
-                box-shadow var(--transition-speed-fast) var(--transition-easing);
+                box-shadow   var(--transition-speed-fast) var(--transition-easing);
   }
   
-  /* Focus state — brand color border + subtle glow */
-  .input:focus {
+  .textarea:focus {
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(181, 77, 188, 0.15);
   }
   
-  /* Error state — red border */
-  .inputError {
+  .textareaError {
     border-color: #e53e3e;
   }
   
-  /* Error message text below input */
+  /* Row that holds error message (left) and char count (right) */
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
   .errorText {
     font-size: var(--font-size-small);
     color: #e53e3e;
     margin: 0;
+  }
+  
+  .charCount {
+    font-size: var(--font-size-small);
+    color: var(--color-gray-medium);
+    margin-left: auto;
   }
