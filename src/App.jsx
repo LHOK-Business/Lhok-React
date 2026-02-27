@@ -26,6 +26,8 @@ import Footer from './components/Footer/Footer';
 import About   from './pages/About/About';
 import Contact from './pages/Contact/Contact';
 import Home    from './pages/Home/Home';
+import StyleSheet from './pages/StyleSheet/StyleSheet';
+
 
 function App() {
     return (
@@ -37,6 +39,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/about"   element={<About />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/StyleSheet" element={<StyleSheet />} />
                 </Routes>
             </main>
             <Footer />
