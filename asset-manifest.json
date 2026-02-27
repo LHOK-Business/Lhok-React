@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/Lhok-React/static/css/main.73b13748.css",
-    "main.js": "/Lhok-React/static/js/main.0aeea83b.js",
+    "main.js": "/Lhok-React/static/js/main.714c5a3d.js",
     "static/media/lhoklogo.png": "/Lhok-React/static/media/lhoklogo.34c259b0d73c1c281f15.png",
     "index.html": "/Lhok-React/index.html",
     "main.73b13748.css.map": "/Lhok-React/static/css/main.73b13748.css.map",
-    "main.0aeea83b.js.map": "/Lhok-React/static/js/main.0aeea83b.js.map"
+    "main.714c5a3d.js.map": "/Lhok-React/static/js/main.714c5a3d.js.map"
   },
   "entrypoints": [
     "static/css/main.73b13748.css",
-    "static/js/main.0aeea83b.js"
+    "static/js/main.714c5a3d.js"
   ]
 }
