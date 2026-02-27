@@ -5,12 +5,17 @@ import FormSelect   from '../../components/FormSelect/FormSelect';
 import Button       from '../../components/Button/Button';
 import styles       from './Contact.module.css';
 
+import { db } from '../../firebase/config';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+
 const SUBJECT_OPTIONS = [
   { value: 'general',  label: 'General Inquiry' },
   { value: 'support',  label: 'Support' },
   { value: 'billing',  label: 'Billing' },
   { value: 'other',    label: 'Other' },
 ];
+
+
 
 function Contact() {
   const [form, setForm] = useState({
@@ -34,17 +39,38 @@ function Contact() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+  
     const newErrors = validate();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    console.log('Form submitted:', form);
-    alert('Message sent! (Firebase coming next)');
+  
+    try {
+      // addDoc creates a new document in the 'contacts' collection
+      // serverTimestamp() tells Firestore to record the exact server time
+      await addDoc(collection(db, 'contactSubmissions'), {
+        name:      form.name,
+        email:     form.email,
+        phone:     form.phone,
+        subject:   form.subject,
+        message:   form.message,
+        createdAt: serverTimestamp(),
+      });
+  
+      // Reset form on success
+      setForm({ name: '', email: '', phone: '', subject: '', message: '' });
+      alert('Message sent successfully!');
+  
+    } catch (error) {
+      console.error('Firebase error:', error);
+      alert('Something went wrong. Please try again.');
+    }
   };
 
+  
   return (
     <div className={styles.page}>
       <div className={styles.card}>
