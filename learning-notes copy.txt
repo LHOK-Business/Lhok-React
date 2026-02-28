@@ -5,3 +5,6 @@ Can I get the following colors into variables
     - warning
     - success
     - information
+
+
+Toast notifications
