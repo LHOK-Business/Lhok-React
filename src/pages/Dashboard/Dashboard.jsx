@@ -8,6 +8,12 @@ import styles from './Dashboard.module.css';
 function Dashboard() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const ADMIN_EMAILS = [
+  'hunain.jd@gmail.com',
+  'jenngbari@gmail.com',
+  'angeleenmatti@gmail.com',
+  'lhok.business@gmail.com',
+];
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -51,6 +57,15 @@ function Dashboard() {
             label="Log Out"
             onClick={handleLogout}
           />
+         
+         
+          {user && ADMIN_EMAILS.includes(user.email?.toLowerCase()) && (
+          <Button
+            label="Admin Panel"
+            onClick={() => navigate('/admin')}
+          />
+)}
+
         </div>
 
       </div>

@@ -32,6 +32,7 @@ import StyleSheet from './pages/StyleSheet/StyleSheet';
 import Login from './pages/Login/Login';
 import Profile from './pages/Profile/Profile';
 import Dashboard from './pages/Dashboard/Dashboard';
+import Admin from './pages/Admin/Admin';
 
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/admin" element={<Admin />} />
                 </Routes>
             </main>
             <Footer />
