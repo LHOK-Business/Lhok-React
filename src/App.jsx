@@ -33,6 +33,7 @@ import Login from './pages/Login/Login';
 import Profile from './pages/Profile/Profile';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Admin from './pages/Admin/Admin';
+import Professionals from './pages/Professionals/Professionals';
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="/professionals" element={<Professionals />} />
                 </Routes>
             </main>
             <Footer />
