@@ -23,10 +23,13 @@ import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+
+
 import About   from './pages/About/About';
 import Contact from './pages/Contact/Contact';
 import Home    from './pages/Home/Home';
 import StyleSheet from './pages/StyleSheet/StyleSheet';
+import Login from './pages/Login/Login';
 
 
 function App() {
@@ -40,6 +43,7 @@ function App() {
                 <Route path="/about"   element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/StyleSheet" element={<StyleSheet />} />
+                <Route path="/login" element={<Login />} />
                 </Routes>
             </main>
             <Footer />

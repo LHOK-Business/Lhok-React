@@ -24,7 +24,8 @@ import logo from '../../assets/lhoklogo.png';
    ────────────────────────────────────────────────────────────*/
 const NAV_ITEMS = [
   { label: 'Contact Us',              to: '/contact' },
-  { label: 'Available Professionals', to: '/professionals' },
+  { label: 'Available Professionals', to: '/professionals'
+     },
 ];
 
 
@@ -107,7 +108,7 @@ function Header() {
             If you later build a modal login instead, swap this for
             a <button onClick={openLoginModal}>.
           */}
-          <Link to="/login" className={styles.loginButton}>
+          <Link to="/Login" className={styles.loginButton}>
             Login
           </Link>
 

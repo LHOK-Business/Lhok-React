@@ -1,0 +1,104 @@
+.page {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+}
+
+.card {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-xl);
+  width: 100%;
+  max-width: 480px;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.errorText {
+  font-size: var(--font-size-small);
+  color: #e53e3e;
+  text-align: center;
+  margin: 0;
+}
+
+/* Toggle link — styled like a subtle text button */
+.toggleButton {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-small);
+  cursor: pointer;
+  text-align: center;
+  padding: 0;
+  transition: color var(--transition-speed-fast) var(--transition-easing);
+}
+
+.toggleButton:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+/* OR divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  color: var(--color-gray-medium);
+  font-size: var(--font-size-small);
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-gray-light);
+}
+
+/* Google sign-in button */
+.googleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-white);
+  border: var(--border-width) solid var(--color-gray-light);
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: box-shadow var(--transition-speed-fast) var(--transition-easing),
+              border-color var(--transition-speed-fast) var(--transition-easing);
+}
+
+.googleButton:hover:not(:disabled) {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--color-gray-medium);
+}
+
+.googleButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.googleIcon {
+  width: 20px;
+  height: 20px;
+}

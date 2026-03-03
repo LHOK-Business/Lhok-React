@@ -4,6 +4,7 @@
 
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 // These values come from your .env file.
 // REACT_APP_ prefix is required by CRA for env variables to work.
@@ -20,4 +21,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Export Firestore database instance — import this in any component that needs the DB
-export const db = getFirestore(app);
+export const db             = getFirestore(app);
+export const auth           = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
