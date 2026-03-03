@@ -30,6 +30,8 @@ import Contact from './pages/Contact/Contact';
 import Home    from './pages/Home/Home';
 import StyleSheet from './pages/StyleSheet/StyleSheet';
 import Login from './pages/Login/Login';
+import Profile from './pages/Profile/Profile';
+import Dashboard from './pages/Dashboard/Dashboard';
 
 
 function App() {
@@ -44,6 +46,8 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/StyleSheet" element={<StyleSheet />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 </Routes>
             </main>
             <Footer />

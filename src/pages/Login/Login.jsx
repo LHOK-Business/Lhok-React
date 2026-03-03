@@ -40,7 +40,7 @@ function Login() {
   // If user is already logged in, redirect to home
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) navigate('/');
+      if (user) navigate('/dashboard');
     });
     // Cleanup listener when component unmounts
     return () => unsubscribe();
