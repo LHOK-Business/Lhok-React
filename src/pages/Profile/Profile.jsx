@@ -2,11 +2,14 @@
 // UPDATE PROFILE PAGE
 // Loads existing profile from Firestore and lets user edit it.
 // Supports two user types: Professional and Client.
-// Once userType is saved once, it is locked and cannot be changed.
 //
-// PROFESSIONAL fields: specialties, yearsInIndustry, preferredContact, website
-// CLIENT fields: servicesLookingFor
-// SHARED fields: displayName, bio, location, instagram, profilePhotoURL
+// USER TYPE FLOW:
+//   1. On first visit: show radio selection card (not locked yet)
+//   2. After first save: show branded "I am a..." card (locked)
+//
+// The flag `userTypeConfirmed` in Firestore tracks whether the user
+// has explicitly chosen their type. At signup it is false (system default).
+// It becomes true the first time the user saves their profile.
 // ============================================
 
 import React, { useState, useEffect } from 'react';
@@ -22,14 +25,11 @@ import Button       from '../../components/Button/Button';
 import styles       from './Profile.module.css';
 
 // ── DROPDOWN OPTIONS ──────────────────────────────────────────
-// These match the options in the original vanilla HTML form exactly
-
 const SPECIALTY_OPTIONS = [
   'Lashes', 'Haircuts', 'Hair Coloring', 'Nails', 'Facials',
   'Massage', 'Makeup', 'Waxing', 'Skincare', 'Brows',
 ];
 
-// Services clients are looking for — same list as specialties
 const SERVICES_LOOKING_FOR_OPTIONS = [
   'Lashes', 'Haircuts', 'Hair Coloring', 'Nails', 'Facials',
   'Massage', 'Makeup', 'Waxing', 'Skincare', 'Brows',
@@ -56,25 +56,24 @@ const CONTACT_OPTIONS = [
 function Profile() {
   const navigate = useNavigate();
 
-  // The currently logged-in Firebase Auth user object
+  // The currently logged-in Firebase Auth user
   const [currentUser, setCurrentUser] = useState(null);
 
   // ── USER TYPE STATE ────────────────────────────────────────
-  // 'professional' or 'client' — controls which fields are shown
-  // null means not yet loaded from Firestore
+  // 'professional' or 'client'
   const [userType, setUserType] = useState('professional');
 
-  // Once the user saves their profile once, userType is locked
-  // They cannot switch between professional and client after first save
-  const [userTypeLocked, setUserTypeLocked] = useState(false);
+  // userTypeConfirmed: true = user has explicitly saved their type before
+  // false = system default from signup, user hasn't confirmed yet
+  // This is what controls whether we show the selector or the locked card
+  const [userTypeConfirmed, setUserTypeConfirmed] = useState(false);
 
   // ── SHARED FORM FIELDS ─────────────────────────────────────
-  // These fields exist for both professionals and clients
   const [form, setForm] = useState({
-    displayName:      '',
-    bio:              '',
-    location:         '',
-    instagram:        '',
+    displayName: '',
+    bio:         '',
+    location:    '',
+    instagram:   '',
   });
 
   // ── PROFESSIONAL-ONLY FIELDS ───────────────────────────────
@@ -82,29 +81,25 @@ function Profile() {
     website:          '',
     yearsInIndustry:  '',
     preferredContact: '',
-    specialties:      [], // Array of selected strings e.g. ['Lashes', 'Nails']
+    specialties:      [],
   });
 
   // ── CLIENT-ONLY FIELDS ─────────────────────────────────────
   const [clientForm, setClientForm] = useState({
-    servicesLookingFor: [], // Array of selected strings
+    servicesLookingFor: [],
   });
 
   // ── PHOTO STATE ────────────────────────────────────────────
-  const [photoURL,     setPhotoURL]     = useState(null); // Saved URL from Firestore
-  const [photoFile,    setPhotoFile]    = useState(null); // New file selected by user
-  const [photoPreview, setPhotoPreview] = useState(null); // Local preview before upload
-
-  // Upload progress percentage (0-100), null when not uploading
+  const [photoURL,      setPhotoURL]      = useState(null);
+  const [photoFile,     setPhotoFile]     = useState(null);
+  const [photoPreview,  setPhotoPreview]  = useState(null);
   const [uploadProgress, setUploadProgress] = useState(null);
 
   // ── UI STATE ───────────────────────────────────────────────
-  const [loading,  setLoading]  = useState(false);
-  const [message,  setMessage]  = useState({ text: '', type: '' });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ text: '', type: '' });
 
   // ── AUTH CHECK ─────────────────────────────────────────────
-  // Runs once on mount. If no user is logged in, redirect to /login
-  // If user is logged in, load their profile data from Firestore
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -114,13 +109,11 @@ function Profile() {
         navigate('/login');
       }
     });
-    return () => unsubscribe(); // Cleanup listener on unmount
+    return () => unsubscribe();
   }, [navigate]);
 
   // ── LOAD PROFILE DATA ──────────────────────────────────────
-  // Fetches the user's Firestore document and populates all form fields
-  // doc(db, 'collection', 'documentId') — creates a reference to a specific document
-  // getDoc() — fetches the document once (not real-time)
+  // Reads Firestore doc and populates all form state
   const loadProfileData = async (userId) => {
     try {
       const userDocRef = doc(db, 'users', userId);
@@ -129,14 +122,13 @@ function Profile() {
       if (userDoc.exists()) {
         const data = userDoc.data();
 
-        // ── Set user type and lock it if already saved ──
-        // If userType exists in Firestore, the user has saved before — lock it
-        if (data.userType) {
-          setUserType(data.userType);
-          setUserTypeLocked(true); // Prevent switching after first save
-        }
+        // ── User type loading ──
+        // userTypeConfirmed === true means user has explicitly chosen before
+        // Only lock the UI if they've confirmed it previously
+        if (data.userType) setUserType(data.userType);
+        setUserTypeConfirmed(data.userTypeConfirmed === true);
 
-        // ── Populate shared fields ──
+        // ── Shared fields ──
         setForm({
           displayName: data.displayName || '',
           bio:         data.bio         || '',
@@ -144,7 +136,7 @@ function Profile() {
           instagram:   data.instagram   || '',
         });
 
-        // ── Populate professional fields ──
+        // ── Professional fields ──
         setProForm({
           website:          data.website          || '',
           yearsInIndustry:  data.yearsInIndustry  || '',
@@ -152,12 +144,12 @@ function Profile() {
           specialties:      data.specialties      || [],
         });
 
-        // ── Populate client fields ──
+        // ── Client fields ──
         setClientForm({
           servicesLookingFor: data.servicesLookingFor || [],
         });
 
-        // ── Populate photo ──
+        // ── Photo ──
         if (data.profilePhotoURL) {
           setPhotoURL(data.profilePhotoURL);
           setPhotoPreview(data.profilePhotoURL);
@@ -171,155 +163,103 @@ function Profile() {
   };
 
   // ── FIELD HANDLERS ─────────────────────────────────────────
+  const handleChange    = (field) => (e) => setForm(prev    => ({ ...prev, [field]: e.target.value }));
+  const handleProChange = (field) => (e) => setProForm(prev => ({ ...prev, [field]: e.target.value }));
 
-  // Generic handler for shared text fields
-  const handleChange = (field) => (e) => {
-    setForm(prev => ({ ...prev, [field]: e.target.value }));
-  };
-
-  // Generic handler for professional-only text/select fields
-  const handleProChange = (field) => (e) => {
-    setProForm(prev => ({ ...prev, [field]: e.target.value }));
-  };
-
-  // ── PILL TOGGLE HANDLERS ───────────────────────────────────
-  // Adds or removes a value from an array field
-  // Used for specialties (professional) and servicesLookingFor (client)
-
-  const handleSpecialtyToggle = (specialty) => {
+  // Toggles a value in/out of an array (used for pill selectors)
+  const handleSpecialtyToggle = (val) => {
     setProForm(prev => ({
       ...prev,
-      specialties: prev.specialties.includes(specialty)
-        ? prev.specialties.filter(s => s !== specialty) // Remove if already selected
-        : [...prev.specialties, specialty],              // Add if not selected
+      specialties: prev.specialties.includes(val)
+        ? prev.specialties.filter(s => s !== val)
+        : [...prev.specialties, val],
     }));
   };
 
-  const handleServiceToggle = (service) => {
+  const handleServiceToggle = (val) => {
     setClientForm(prev => ({
       ...prev,
-      servicesLookingFor: prev.servicesLookingFor.includes(service)
-        ? prev.servicesLookingFor.filter(s => s !== service)
-        : [...prev.servicesLookingFor, service],
+      servicesLookingFor: prev.servicesLookingFor.includes(val)
+        ? prev.servicesLookingFor.filter(s => s !== val)
+        : [...prev.servicesLookingFor, val],
     }));
   };
 
   // ── PHOTO HANDLERS ─────────────────────────────────────────
-
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
-    // Validate file size (5MB max)
-    if (file.size > 5 * 1024 * 1024) {
-      showMessage('Image must be smaller than 5MB', 'error');
-      return;
-    }
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      showMessage('Please select an image file', 'error');
-      return;
-    }
-
+    if (file.size > 5 * 1024 * 1024) { showMessage('Image must be smaller than 5MB', 'error'); return; }
+    if (!file.type.startsWith('image/')) { showMessage('Please select an image file', 'error'); return; }
     setPhotoFile(file);
-    // URL.createObjectURL creates a temporary local URL for preview
-    // without uploading to Firebase yet
     setPhotoPreview(URL.createObjectURL(file));
   };
 
   const handleRemovePhoto = () => {
     setPhotoFile(null);
-    setPhotoPreview(photoURL || null); // Revert to saved photo if exists
+    setPhotoPreview(photoURL || null);
   };
 
-  // ── UPLOAD PHOTO TO FIREBASE STORAGE ──────────────────────
-  // Returns a Promise that resolves to the download URL
-  // uploadBytesResumable allows us to track upload progress
-  const uploadPhoto = (file, userId) => {
-    return new Promise((resolve, reject) => {
-      const ext        = file.name.split('.').pop();
-      const fileName   = `profile_${Date.now()}.${ext}`;
-      const storageRef = ref(storage, `profile-pictures/${userId}/${fileName}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
+  // ── UPLOAD PHOTO ───────────────────────────────────────────
+  const uploadPhoto = (file, userId) => new Promise((resolve, reject) => {
+    const ext        = file.name.split('.').pop();
+    const storageRef = ref(storage, `profile-pictures/${userId}/profile_${Date.now()}.${ext}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on('state_changed',
+      (snap) => setUploadProgress(Math.round((snap.bytesTransferred / snap.totalBytes) * 100)),
+      reject,
+      async () => { resolve(await getDownloadURL(uploadTask.snapshot.ref)); setUploadProgress(null); }
+    );
+  });
 
-      uploadTask.on('state_changed',
-        // Called repeatedly during upload with progress info
-        (snapshot) => {
-          const pct = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-          setUploadProgress(pct);
-        },
-        // Called if upload fails
-        (error) => reject(error),
-        // Called when upload completes successfully
-        async () => {
-          const url = await getDownloadURL(uploadTask.snapshot.ref);
-          setUploadProgress(null); // Hide progress bar
-          resolve(url);
-        }
-      );
-    });
-  };
-
-  // ── DELETE OLD PHOTO FROM STORAGE ─────────────────────────
-  // Removes the old photo file from Firebase Storage to save space
-  // Non-critical — we don't throw if this fails
+  // ── DELETE OLD PHOTO ───────────────────────────────────────
   const deleteOldPhoto = async (url) => {
     if (!url) return;
     try {
-      // Extract the file path from the full Firebase Storage URL
-      const filePath = decodeURIComponent(url.split('/o/')[1].split('?')[0]);
-      await deleteObject(ref(storage, filePath));
-    } catch (e) {
-      console.error('Could not delete old photo (non-critical):', e);
-    }
+      await deleteObject(ref(storage, decodeURIComponent(url.split('/o/')[1].split('?')[0])));
+    } catch (e) { console.error('Old photo delete failed (non-critical):', e); }
   };
 
   // ── SHOW MESSAGE ───────────────────────────────────────────
-  // Success messages auto-dismiss after 5 seconds
-  // Error messages stay until user takes action
   const showMessage = (text, type) => {
     setMessage({ text, type });
-    if (type === 'success') {
-      setTimeout(() => setMessage({ text: '', type: '' }), 5000);
-    }
+    if (type === 'success') setTimeout(() => setMessage({ text: '', type: '' }), 5000);
   };
 
   // ── SAVE PROFILE ───────────────────────────────────────────
-  // Handles both creating new documents and updating existing ones
-  // setDoc() — creates or completely overwrites a document
-  // updateDoc() — only updates specified fields, leaves others unchanged
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!currentUser) return;
-
     setLoading(true);
+
     try {
-      // ── Handle photo upload if a new file was selected ──
-      let newPhotoURL = photoURL; // Default to existing photo
+      // Upload new photo if selected
+      let newPhotoURL = photoURL;
       if (photoFile) {
         showMessage('Uploading photo...', 'success');
         newPhotoURL = await uploadPhoto(photoFile, currentUser.uid);
-        await deleteOldPhoto(photoURL); // Remove old photo from storage
+        await deleteOldPhoto(photoURL);
         setPhotoURL(newPhotoURL);
-        setPhotoFile(null); // Clear the file input
+        setPhotoFile(null);
       }
 
-      // ── Build the shared profile data object ──
-      // These fields are saved for both professionals and clients
+      // Shared data saved for all user types
       const sharedData = {
-        displayName:     form.displayName,
-        bio:             form.bio,
-        location:        form.location,
-        instagram:       form.instagram,
-        profilePhotoURL: newPhotoURL || null,
-        userType:        userType,
-        updatedAt:       serverTimestamp(),
+        displayName:       form.displayName,
+        bio:               form.bio,
+        location:          form.location,
+        instagram:         form.instagram,
+        profilePhotoURL:   newPhotoURL || null,
+        userType:          userType,
+        // ── KEY FLAG ──
+        // userTypeConfirmed: true means the user explicitly chose their type
+        // We write this on every save so older accounts get upgraded too
+        userTypeConfirmed: true,
+        updatedAt:         serverTimestamp(),
       };
 
-      // ── Add type-specific fields ──
-      // Only include relevant fields based on userType
-      // This prevents client documents from having empty professional fields
-      const typeSpecificData = userType === 'professional'
+      // Type-specific data
+      const typeData = userType === 'professional'
         ? {
             website:          proForm.website,
             yearsInIndustry:  proForm.yearsInIndustry,
@@ -330,49 +270,24 @@ function Profile() {
             servicesLookingFor: clientForm.servicesLookingFor,
           };
 
-      const profileData = { ...sharedData, ...typeSpecificData };
+      const profileData = { ...sharedData, ...typeData };
 
-      // ── Check if document exists to decide create vs update ──
+      // Check if doc exists to decide create vs update
       const userDocRef = doc(db, 'users', currentUser.uid);
       const userDoc    = await getDoc(userDocRef);
 
       if (userDoc.exists()) {
-        // ── UPDATE existing document ──
-        // updateDoc only modifies the fields we specify
-        // Other fields (like createdAt, approved) remain unchanged
-        const existingData = userDoc.data();
-
-        // Only write userType if it was missing (older accounts)
-        // We never overwrite an existing userType to prevent accidental switches
-        if (!existingData.userType) {
-          profileData.userType = userType;
-
-          // Backfill approval fields for professionals if missing from old accounts
-          if (userType === 'professional' && existingData.approved === undefined) {
-            profileData.approved   = false;
-            profileData.approvedAt = null;
-          }
-        } else {
-          // userType already set — remove it from update to prevent overwriting
-          delete profileData.userType;
-        }
-
         await updateDoc(userDocRef, profileData);
-        setUserTypeLocked(true); // Lock type after first successful save
         showMessage('Profile updated successfully!', 'success');
-
       } else {
-        // ── CREATE new document ──
-        // This runs if somehow the signup didn't create the doc
-        // setDoc creates the document with all fields
+        // Fallback: create doc if signup somehow didn't create it
         await setDoc(userDocRef, {
           ...profileData,
-          email:     currentUser.email,
-          approved:  userType === 'professional' ? false : undefined,
-          approvedAt: userType === 'professional' ? null : undefined,
-          createdAt: serverTimestamp(),
+          email:      currentUser.email,
+          approved:   userType === 'professional' ? false : undefined,
+          approvedAt: userType === 'professional' ? null  : undefined,
+          createdAt:  serverTimestamp(),
         });
-        setUserTypeLocked(true);
         showMessage(
           userType === 'professional'
             ? 'Profile created! Awaiting admin approval.'
@@ -380,6 +295,10 @@ function Profile() {
           'success'
         );
       }
+
+      // Lock the user type in local state after successful save
+      setUserTypeConfirmed(true);
+
     } catch (error) {
       showMessage('Error saving profile: ' + error.message, 'error');
     } finally {
@@ -394,14 +313,12 @@ function Profile() {
 
         <h1 className={styles.title}>Update Your Profile</h1>
 
-        {/* Show logged-in email for reference */}
         {currentUser && (
           <p className={styles.loggedIn}>
             Logged in as: <strong>{currentUser.email}</strong>
           </p>
         )}
 
-        {/* Status message (success/error) */}
         {message.text && (
           <div className={`${styles.message} ${styles[message.type]}`}>
             {message.text}
@@ -411,18 +328,20 @@ function Profile() {
         <form onSubmit={handleSubmit} noValidate className={styles.form}>
 
           {/* ── USER TYPE SELECTOR ── */}
-          {/* Hidden once saved. Allows user to identify as Professional or Client */}
-          <div className={styles.fieldWrapper}>
-            <label className={styles.fieldLabel}>I am a:</label>
+          {/* 
+            Two states:
+            A) userTypeConfirmed === false → show radio selection card
+            B) userTypeConfirmed === true  → show locked branded card
+          */}
+          {!userTypeConfirmed ? (
 
-            {userTypeLocked ? (
-              // Once locked, show as read-only text
-              <p className={styles.lockedType}>
-                {userType === 'professional' ? '💼 Professional' : '🙋 Client'}
-                <span className={styles.lockedNote}> (cannot be changed after saving)</span>
-              </p>
-            ) : (
-              // Before first save, show radio buttons to choose
+            // ── A: Not yet confirmed — show selection card ──
+            // Matches the design in the screenshot exactly
+            <div className={styles.userTypeCard}>
+              <label className={styles.userTypeTitle}>
+                I am a: <span className={styles.required}>*</span>
+              </label>
+
               <div className={styles.radioGroup}>
                 <label className={styles.radioLabel}>
                   <input
@@ -432,8 +351,9 @@ function Profile() {
                     checked={userType === 'professional'}
                     onChange={() => setUserType('professional')}
                   />
-                  💼 Professional
+                  Beauty Professional
                 </label>
+
                 <label className={styles.radioLabel}>
                   <input
                     type="radio"
@@ -442,11 +362,34 @@ function Profile() {
                     checked={userType === 'client'}
                     onChange={() => setUserType('client')}
                   />
-                  🙋 Client
+                  Client looking for services
                 </label>
               </div>
-            )}
-          </div>
+
+              <p className={styles.lockedNote}>
+                Account type is locked and cannot be changed after saving.
+              </p>
+            </div>
+
+          ) : (
+
+            // ── B: Confirmed — show branded locked card ──
+            // Clean card following your brand colors
+            <div className={styles.userTypeLockedCard}>
+              {userType === 'professional' ? (
+                <>
+                  <span className={styles.userTypeIcon}>💼</span>
+                  <span className={styles.userTypeLockedText}>I am a Beauty Professional</span>
+                </>
+              ) : (
+                <>
+                  <span className={styles.userTypeIcon}>🙋</span>
+                  <span className={styles.userTypeLockedText}>I am a Client looking for services</span>
+                </>
+              )}
+            </div>
+
+          )}
 
           {/* ── PROFILE PHOTO ── */}
           <div className={styles.photoSection}>
@@ -468,13 +411,9 @@ function Profile() {
               />
               <p className={styles.hint}>Max 5MB. JPG, PNG, or GIF. Recommended: 400×400px square.</p>
 
-              {/* Progress bar — only shown during upload */}
               {uploadProgress !== null && (
                 <div className={styles.progressBar}>
-                  <div
-                    className={styles.progressFill}
-                    style={{ width: `${uploadProgress}%` }}
-                  />
+                  <div className={styles.progressFill} style={{ width: `${uploadProgress}%` }} />
                   <span className={styles.progressText}>{uploadProgress}%</span>
                 </div>
               )}
@@ -487,7 +426,7 @@ function Profile() {
             </div>
           </div>
 
-          {/* ── SHARED FIELDS (all users) ── */}
+          {/* ── SHARED FIELDS ── */}
           <FormInput
             label="Display Name"
             id="displayName"
@@ -498,23 +437,21 @@ function Profile() {
           />
 
           {/* ── PROFESSIONAL-ONLY FIELDS ── */}
-          {/* The && operator conditionally renders these only for professionals */}
           {userType === 'professional' && (
             <>
-              {/* Specialties — pill button multi-select */}
               <div className={styles.fieldWrapper}>
                 <label className={styles.fieldLabel}>
                   Specialties <span className={styles.required}>*</span>
                 </label>
                 <div className={styles.pillGrid}>
-                  {SPECIALTY_OPTIONS.map((specialty) => (
+                  {SPECIALTY_OPTIONS.map((s) => (
                     <button
-                      key={specialty}
+                      key={s}
                       type="button"
-                      onClick={() => handleSpecialtyToggle(specialty)}
-                      className={styles.pill + (proForm.specialties.includes(specialty) ? ' ' + styles.pillActive : '')}
+                      onClick={() => handleSpecialtyToggle(s)}
+                      className={styles.pill + (proForm.specialties.includes(s) ? ' ' + styles.pillActive : '')}
                     >
-                      {specialty}
+                      {s}
                     </button>
                   ))}
                 </div>
@@ -544,18 +481,16 @@ function Profile() {
           {/* ── CLIENT-ONLY FIELDS ── */}
           {userType === 'client' && (
             <div className={styles.fieldWrapper}>
-              <label className={styles.fieldLabel}>
-                Services I'm Looking For
-              </label>
+              <label className={styles.fieldLabel}>Services I'm Looking For</label>
               <div className={styles.pillGrid}>
-                {SERVICES_LOOKING_FOR_OPTIONS.map((service) => (
+                {SERVICES_LOOKING_FOR_OPTIONS.map((s) => (
                   <button
-                    key={service}
+                    key={s}
                     type="button"
-                    onClick={() => handleServiceToggle(service)}
-                    className={styles.pill + (clientForm.servicesLookingFor.includes(service) ? ' ' + styles.pillActive : '')}
+                    onClick={() => handleServiceToggle(s)}
+                    className={styles.pill + (clientForm.servicesLookingFor.includes(s) ? ' ' + styles.pillActive : '')}
                   >
-                    {service}
+                    {s}
                   </button>
                 ))}
               </div>

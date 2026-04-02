@@ -181,3 +181,87 @@
   justify-content: center;
   margin-top: var(--spacing-sm);
 }
+
+/* ── ADD THESE TO THE BOTTOM OF Profile.module.css ── */
+
+/* ── USER TYPE SELECTION CARD (unconfirmed) ── */
+/* Shown on first visit — matches the screenshot design */
+.userTypeCard {
+  border: var(--border-width) solid var(--color-primary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  text-align: center;
+}
+
+.userTypeTitle {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+/* Radio button row */
+.radioGroup {
+  display: flex;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.radioLabel input[type="radio"] {
+  accent-color: var(--color-primary); /* Colors the radio button to brand purple */
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Small disclaimer text below radios */
+.lockedNote {
+  font-size: var(--font-size-tiny);
+  color: var(--color-gray-medium);
+  font-style: italic;
+  margin: 0;
+}
+
+/* ── USER TYPE LOCKED CARD (confirmed) ── */
+/* Shown after user has saved — clean branded display */
+.userTypeLockedCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: linear-gradient(
+    135deg,
+    rgba(181, 77, 188, 0.08) 0%,
+    rgba(154, 62, 163, 0.05) 100%
+  );
+  border: var(--border-width) solid var(--color-primary);
+  border-radius: var(--border-radius-lg);
+}
+
+.userTypeIcon {
+  font-size: var(--font-size-subheading);
+}
+
+.userTypeLockedText {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
