@@ -1,75 +1,51 @@
-/*
-  Header.jsx
-  ══════════════════════════════════════════════════════════════
-  LHOK site header — fixed purple gradient bar with:
-    - Logo (left)
-    - Nav links with pill hover effect (center)
-    - Login button (right)
-    - Hamburger menu on mobile
-
-  Depends on: Header.module.css, index.css variables
-  ══════════════════════════════════════════════════════════════
-*/
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../firebase/config';
 import styles from './Header.module.css';
-
 import logo from '../../assets/lhoklogo.png';
 
-
-/* ── NAV ITEMS ────────────────────────────────────────────────
-   Update labels and paths to match your real pages.
-   Order here = order in the header.
-   ────────────────────────────────────────────────────────────*/
 const NAV_ITEMS = [
   { label: 'Contact Us',              to: '/contact' },
-  { label: 'Available Professionals', to: '/professionals'
-     },
+  { label: 'Available Professionals', to: '/professionals' },
 ];
 
-
 function Header() {
-  // Tracks whether the mobile hamburger menu is open or closed
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
-  /*
-    getNavLinkClass is passed to NavLink's className prop.
-    NavLink calls it automatically with { isActive: true/false }
-    depending on whether its `to` path matches the current URL.
+  // Listen to Firebase auth state — runs once on mount
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
+    return () => unsubscribe(); // cleanup on unmount
+  }, []);
 
-    When active: apply both .navLink and .navLinkActive
-    When not:    apply just .navLink
-  */
+  // Pull initials from displayName or email fallback
+  const getInitials = (user) => {
+    if (user.displayName) {
+      const parts = user.displayName.trim().split(' ');
+      return parts.length >= 2
+        ? `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase()
+        : parts[0][0].toUpperCase();
+    }
+    return user.email[0].toUpperCase();
+  };
+
   const getNavLinkClass = ({ isActive }) =>
-    isActive
-      ? `${styles.navLink} ${styles.navLinkActive}`
-      : styles.navLink;
+    isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink;
 
   const getMobileNavLinkClass = ({ isActive }) =>
-    isActive
-      ? `${styles.mobileNavLink} ${styles.navLinkActive}`
-      : styles.mobileNavLink;
+    isActive ? `${styles.mobileNavLink} ${styles.navLinkActive}` : styles.mobileNavLink;
 
   return (
-    /*
-      <> ... </> is a React Fragment — lets us return two sibling
-      elements (header + mobile menu) without adding an extra div to the DOM.
-    */
     <>
       <header className={styles.header}>
         <div className={styles.container}>
 
-          {/* ── LOGO ────────────────────────────────────────── */}
-          {/*
-            Link wraps the logo so clicking it navigates home.
-            Once you have your logo file in assets/:
-              Replace the text "LHOK" with:
-              <img src={logo} alt="LHOK" className={styles.logoImage} />
-          */}
-
+          {/* ── LOGO ── */}
           <Link to="/" className={styles.logoLink}>
-            {/* Swap this <span> for your <img> once you import the logo */}
             <span style={{
               fontFamily: 'var(--font-family-primary)',
               fontWeight: 'var(--font-weight-bold)',
@@ -81,46 +57,35 @@ function Header() {
             </span>
           </Link>
 
-
-          {/* ── DESKTOP NAV ─────────────────────────────────── */}
+          {/* ── DESKTOP NAV ── */}
           <nav className={styles.nav}>
             {NAV_ITEMS.map((item) => (
-              /*
-                NavLink vs Link:
-                  Link      — just navigates, no active state awareness
-                  NavLink   — same as Link, but knows if its path is active
-                              so we can style the current page differently
-              */
-              <NavLink
-                key={item.label}
-                to={item.to}
-                className={getNavLinkClass}
-              >
+              <NavLink key={item.label} to={item.to} className={getNavLinkClass}>
                 {item.label}
               </NavLink>
             ))}
           </nav>
 
+          {/* ── LOGIN or AVATAR ── */}
+          {currentUser ? (
+            // Logged in — show initials circle linking to /profile
+            <Link to="/Dashboard" className={styles.avatarButton}>
+              {getInitials(currentUser)}
+            </Link>
+          ) : (
+            // Logged out — show Login button
+            <Link to="/login" className={styles.loginButton}>
+              Login
+            </Link>
+          )}
 
-          {/* ── LOGIN BUTTON ─────────────────────────────────── */}
-          {/*
-            Using <Link> here because Login is a navigation action.
-            If you later build a modal login instead, swap this for
-            a <button onClick={openLoginModal}>.
-          */}
-          <Link to="/Login" className={styles.loginButton}>
-            Login
-          </Link>
-
-
-          {/* ── HAMBURGER (mobile only) ──────────────────────── */}
+          {/* ── HAMBURGER ── */}
           <button
             className={styles.hamburger}
             onClick={() => setIsMobileMenuOpen(prev => !prev)}
             aria-label="Toggle navigation menu"
             aria-expanded={isMobileMenuOpen}
           >
-            {/* Three lines = hamburger icon, styled purely in CSS */}
             <span className={styles.hamburgerLine} />
             <span className={styles.hamburgerLine} />
             <span className={styles.hamburgerLine} />
@@ -129,38 +94,37 @@ function Header() {
         </div>
       </header>
 
-
-      {/* ── MOBILE MENU ───────────────────────────────────────
-          Only renders when isMobileMenuOpen is true.
-          `&&` means: "if left side is true, render right side"
-
-          It sits directly below the fixed header in the DOM.
-          Because the header is fixed, this menu naturally appears
-          under it at the top of the scrollable page area.
-          ────────────────────────────────────────────────────*/}
+      {/* ── MOBILE MENU ── */}
       {isMobileMenuOpen && (
-        <nav
-          className={styles.mobileMenu}
-          style={{ marginTop: 'var(--header-height)' }}
-        >
+        <nav className={styles.mobileMenu} style={{ marginTop: 'var(--header-height)' }}>
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.label}
               to={item.to}
               className={getMobileNavLinkClass}
-              onClick={() => setIsMobileMenuOpen(false)} // close menu on navigate
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               {item.label}
             </NavLink>
           ))}
 
-          <Link
-            to="/login"
-            className={styles.mobileLoginButton}
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Login
-          </Link>
+          {currentUser ? (
+            <Link
+              to="/profile"
+              className={styles.mobileLoginButton}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {getInitials(currentUser)} — My Profile
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className={styles.mobileLoginButton}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Login
+            </Link>
+          )}
         </nav>
       )}
     </>

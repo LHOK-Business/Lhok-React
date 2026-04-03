@@ -227,3 +227,36 @@
     display: flex;
   }
 }
+/* ── AVATAR BUTTON ────────────────────────────────────────────
+   Circular initials badge — replaces Login when user is signed in.
+   Same sizing as loginButton so the header layout doesn't shift.
+   ────────────────────────────────────────────────────────────*/
+.avatarButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+
+  background-color: var(--color-white);
+  color: var(--color-primary);
+
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-bold);
+
+  border: var(--border-width) solid var(--color-white);
+  transition:
+    background-color var(--transition-speed-fast) var(--transition-easing),
+    color            var(--transition-speed-fast) var(--transition-easing);
+
+  white-space: nowrap;
+}
+
+.avatarButton:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  text-decoration: none;
+}

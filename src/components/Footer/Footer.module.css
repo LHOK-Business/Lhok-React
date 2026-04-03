@@ -1,5 +1,6 @@
 /* ============================================
    Footer.module.css
+   4-column layout matching the vanilla design.
    ============================================ */
 
 .footer {
@@ -12,80 +13,127 @@
   padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-lg);
 }
 
-/* ── CONTAINER ────────────────────────────────────────────────
-   Single column layout:
-     Row 1: nav links
-     Row 2: copyright
-   align-items: center keeps both rows horizontally centered.
-   ────────────────────────────────────────────────────────────*/
 .container {
   max-width: var(--max-content-width);
   margin: 0 auto;
-
   display: flex;
-  flex-direction: column;   /* stack nav row above copyright */
-  align-items: center;
-  gap: var(--spacing-md);
+  flex-direction: column;
+  gap: var(--spacing-lg);
 }
 
-/* ── NAV ROW ──────────────────────────────────────────────────
-   All links in one horizontal row, evenly distributed.
-   space-evenly puts equal space before, between, and after each link.
-   width: 100% ensures the spacing stretches the full footer width.
-   ────────────────────────────────────────────────────────────*/
-.navRow {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;  /* distributes links evenly across full width */
-  align-items: center;
+/* ── 4 COLUMNS ── */
+.columnsRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-xl);
   width: 100%;
-  flex-wrap: wrap;                /* wraps to next line if screen is too narrow */
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
   gap: var(--spacing-sm);
 }
 
-/* ── NAV LINKS ────────────────────────────────────────────────*/
+/* ── COLUMN HEADINGS ── */
+.columnHeading {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-xs);
+  /* underline accent matching the screenshot */
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 2px solid var(--color-primary);
+  width: fit-content;
+}
+
+/* ── LINK LIST ── */
+.linkList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
 .navLink {
   font-family: var(--font-family-primary);
   font-size: var(--font-size-body);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-white);
-
-  padding: var(--spacing-xs) var(--spacing-md);
-  border-radius: var(--border-radius-lg);
-  border: 1px solid transparent;
-
-  transition:
-    background-color var(--transition-speed-fast) var(--transition-easing),
-    border-color     var(--transition-speed-fast) var(--transition-easing);
-
-  white-space: nowrap;
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-primary);
+  transition: color var(--transition-speed-fast) var(--transition-easing);
+  text-align: left;
 }
 
 .navLink:hover {
-  background-color: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.35);
-  color: var(--color-white);
+  color: var(--color-primary);
   text-decoration: none;
 }
 
-/* ── COPYRIGHT ────────────────────────────────────────────────
-   Sits below the nav row, centered.
-   ────────────────────────────────────────────────────────────*/
+/* ── GET STARTED COLUMN ── */
+.tagline {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-small);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  margin-bottom: var(--spacing-xs);
+}
+
+.ctaButton {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  width: fit-content;
+  transition:
+    background-color var(--transition-speed-fast) var(--transition-easing),
+    transform var(--transition-speed-fast) var(--transition-easing);
+}
+
+.ctaButton:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-1px);
+  text-decoration: none;
+  color: var(--color-white);
+}
+
+/* ── SOCIAL ROW ── */
+.socialRow {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  margin-top: var(--spacing-xs);
+}
+
+/* ── DIVIDER ── */
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(181, 77, 188, 0.2);
+}
+
+/* ── COPYRIGHT ── */
 .copyright {
   font-family: var(--font-family-primary);
   font-size: var(--font-size-small);
-  font-weight: var(--font-weight-normal);
   color: var(--color-white);
   text-align: center;
 }
 
-/* ── RESPONSIVE ───────────────────────────────────────────────
-   Mobile: stack every link vertically, one per line
-   ────────────────────────────────────────────────────────────*/
+/* ── RESPONSIVE ── */
 @media (max-width: 768px) {
-  .navRow {
-    flex-direction: column;   /* stack links vertically */
-    align-items: center;
-    gap: var(--spacing-xs);
+  .columnsRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .columnsRow {
+    grid-template-columns: 1fr;
   }
 }
