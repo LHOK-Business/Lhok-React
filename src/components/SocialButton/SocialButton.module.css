@@ -1,38 +1,45 @@
-/* ── SOCIAL BUTTON ────────────────────────────────────────────
-   Circular icon button — Instagram gradient on hover.
-   Size is controlled by the `size` prop passed inline.
-   ────────────────────────────────────────────────────────────*/
-.button {
+.socialIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  color: var(--color-white);
+
+  cursor: pointer;
+  border: none;
+
   transition:
-    background var(--transition-speed-fast) var(--transition-easing),
-    border-color var(--transition-speed-fast) var(--transition-easing),
-    transform var(--transition-speed-fast) var(--transition-easing);
-  flex-shrink: 0;
+    transform var(--transition-speed-fast) var(--transition-easing),
+    opacity   var(--transition-speed-fast) var(--transition-easing);
 }
 
-.button:hover {
-  /* Instagram brand gradient */
-  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
-  border-color: transparent;
+.socialIcon:hover {
   transform: translateY(-2px);
+  opacity: 0.85;
+}
+
+/* PLATFORM STYLES */
+.iconInstagram {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+.iconWebsite {
+  background-color: #1976d2;
+}
+
+.iconEmail {
+  background-color: #4CAF50;
 }
 
 .icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 55%;
-  height: 55%;
+  width: 50%;
+  height: 50%;
 }
 
 .icon svg {
   width: 100%;
   height: 100%;
+  fill: white;
 }

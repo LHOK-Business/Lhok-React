@@ -88,11 +88,12 @@
   font-family: var(--font-family-primary);
   font-size: var(--font-size-body);
   font-weight: var(--font-weight-medium);
-  color: var(--color-white);
+  color:grey;
 
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--border-radius-lg);
   border: 1px solid transparent;
+
 
   transition:
     background-color var(--transition-speed-fast) var(--transition-easing),
@@ -104,7 +105,7 @@
 .navLink:hover {
   background-color: rgba(255, 255, 255, 0.18);
   border-color: rgba(255, 255, 255, 0.35);
-  color: var(--color-white);   /* override global a:hover color */
+  color: var(--color-primary-dark);   /* override global a:hover color */
   text-decoration: none;        /* override global a:hover underline */
 }
 
@@ -241,7 +242,7 @@
   border-radius: 50%;
 
   background-color: var(--color-white);
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
 
   font-family: var(--font-family-primary);
   font-size: var(--font-size-small);

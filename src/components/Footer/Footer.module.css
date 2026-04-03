@@ -6,14 +6,16 @@
 .footer {
   background: linear-gradient(
     to top,
-    var(--color-primary)  1%,
-    var(--color-white)    72%
+    var(--color-primary)  10%,
+    var(--color-white)    100%
   );
+  /* outline: 2px solid red;  */
   box-shadow: var(--shadow-md);
   padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-lg);
 }
 
 .container {
+  /* outline: 2px solid blue; */
   max-width: var(--max-content-width);
   margin: 0 auto;
   display: flex;
@@ -58,19 +60,30 @@
 }
 
 .navLink {
+  display: block; 
+  text-align: left;            /* explicit */
   font-family: var(--font-family-primary);
   font-size: var(--font-size-body);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-text-primary);
-  transition: color var(--transition-speed-fast) var(--transition-easing);
-  text-align: left;
+  font-weight: var(--font-weight-medium);
+  color:grey;
+
+  padding: var(--spacing-xs) 0;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid transparent;
+
+  transition:
+    background-color var(--transition-speed-fast) var(--transition-easing),
+    border-color     var(--transition-speed-fast) var(--transition-easing);
+
+  white-space: nowrap;
 }
 
 .navLink:hover {
-  color: var(--color-primary);
-  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: var(--color-primary-dark);   /* override global a:hover color */
+  text-decoration: none;        /* override global a:hover underline */
 }
-
 /* ── GET STARTED COLUMN ── */
 .tagline {
   font-family: var(--font-family-primary);

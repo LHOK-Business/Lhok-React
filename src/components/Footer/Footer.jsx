@@ -52,9 +52,9 @@ function Footer() {
           {/* Column 3 — Get Started */}
           <div className={styles.column}>
             <h3 className={styles.columnHeading}>Get Started</h3>
-            <p className={styles.tagline}>
+            {/* <p className={styles.tagline}>
               Join the LHOK community of beauty professionals.
-            </p>
+            </p> */}
             <Link to="/login" className={styles.ctaButton}>
               Start Lhoking
             </Link>
@@ -64,11 +64,10 @@ function Footer() {
           <div className={styles.column}>
             <h3 className={styles.columnHeading}>Follow Us</h3>
             <div className={styles.socialRow}>
-              <SocialButton
-                platform="instagram"
-                href="https://instagram.com/lhok"
-                size={44}
-              />
+            <SocialButton 
+              platform="instagram" 
+              href="https://www.instagram.com/lhok.ca/" 
+            />
             </div>
           </div>
 

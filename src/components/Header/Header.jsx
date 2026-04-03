@@ -7,7 +7,7 @@ import logo from '../../assets/lhoklogo.png';
 
 const NAV_ITEMS = [
   { label: 'Contact Us',              to: '/contact' },
-  { label: 'Available Professionals', to: '/professionals' },
+  { label: 'Professionals', to: '/professionals' },
 ];
 
 function Header() {
