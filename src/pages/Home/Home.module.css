@@ -1,0 +1,185 @@
+/* ============================================
+   Landing Page - Mobile First
+   ============================================ */
+
+/* ── PAGE ── */
+.page {
+  min-height: 100%;
+  padding: var(--spacing-xl);
+}
+
+/* ── CONTAINER ── */
+/* MOBILE: stacked */
+.container {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+/* ── TEXT SECTION ── */
+.textSection {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.textList {
+  list-style: none;
+  padding: 0;
+  margin: var(--spacing-md) 0;
+}
+
+.textList li {
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-primary);
+}
+
+/* ── CTA BUTTON ── */
+.ctaButton {
+  display: inline-block;
+  margin-top: var(--spacing-md);
+
+  background-color: var(--color-primary);
+  color: var(--color-white);
+
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+
+  font-weight: var(--font-weight-bold);
+  text-decoration: none;
+
+  transition: transform var(--transition-speed-fast);
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+}
+
+/* ── CAROUSEL SECTION ── */
+.carouselSection {
+  overflow: hidden;
+}
+
+/* ── IMAGE GRID ── */
+.imageGrid {
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  gap: var(--spacing-sm);
+}
+
+/* ── SCROLL WRAPPER ── */
+.scrollWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+
+  animation: scrollVertical 35s linear infinite;
+}
+
+/* ── IMAGES ── */
+.imageGrid img {
+  width: 100%;
+  border-radius: var(--border-radius-lg);
+  object-fit: cover;
+}
+
+/* ── ANIMATION ── */
+@keyframes scrollVertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+/* ============================================
+   DESKTOP ENHANCEMENT
+   ============================================ */
+
+@media (min-width: 768px) {
+
+  .container {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  /* LEFT SIDE */
+  .textSection {
+    flex: 1;
+    text-align: left;
+  }
+
+  /* RIGHT SIDE */
+  .carouselSection {
+    flex: 1;
+    max-height: 500px;
+  }
+
+  .imageGrid {
+    height: 500px;
+  }
+}
+
+/* ── SCROLL WRAPPER ── */
+.scrollWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+
+  animation: scrollVertical 55s linear infinite;
+
+  /* Pause animation on hover */
+  /* Stops the whole scroll when hovering anywhere in the wrapper */
+  transition: none;
+}
+
+.scrollWrapper:hover {
+  animation-play-state: paused;
+}
+
+/* ── IMAGES ── */
+.imageGrid img {
+  width: 100%;
+  border-radius: var(--border-radius-lg);
+  object-fit: cover;
+
+  /* Add smooth transition for bounce */
+  transition: transform 0.3s ease;
+}
+
+/* ── BOUNCE EFFECT ON HOVER ── */
+.imageGrid img:hover {
+  animation: bounce 0.6s ease;
+}
+
+/* ── BOUNCE KEYFRAMES ── */
+@keyframes bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+/* ── ADJUST HEIGHT ── */
+.carouselSection {
+  overflow: hidden;
+  max-height: 400px; /* Reduced from 500px to make it shorter */
+}
+
+@media (min-width: 768px) {
+  .carouselSection {
+    flex: 1;
+    max-height: 400px; /* Adjust desktop height too */
+  }
+
+  .imageGrid {
+    height: 400px; /* Shorter carousel */
+  }
+}
