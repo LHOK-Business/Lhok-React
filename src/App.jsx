@@ -34,7 +34,8 @@ import Profile from './pages/Profile/Profile';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Admin from './pages/Admin/Admin';
 import Professionals from './pages/Professionals/Professionals';
-
+import TnC   from './pages/TnC/TnC';
+import PnP   from './pages/PnP/PnP';
 
 function App() {
     return (
@@ -52,6 +53,8 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/professionals" element={<Professionals />} />
+                <Route path="/terms" element={<TnC />} />
+                <Route path="/privacy" element={<PnP />} />
                 </Routes>
             </main>
             <Footer />

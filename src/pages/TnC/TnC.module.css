@@ -1,0 +1,19 @@
+.page {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-xl);
+}
+
+.container {
+  max-width: 800px;
+  width: 100%;
+  text-align: left;
+}
+
+.intro {
+  margin-bottom: var(--spacing-lg);
+}
+
+.section {
+  margin-bottom: var(--spacing-lg);
+}
