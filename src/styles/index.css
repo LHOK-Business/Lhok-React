@@ -92,7 +92,7 @@ body {
 
     --color-white: #ffffff;
     --color-gray-dark: #333333;
-    : #666666;
+    --color-grey: #666666;
     --color-gray-light: #e0e0e0;
     
     /* Semantic color names */
@@ -100,9 +100,10 @@ body {
     --color-text-secondary: var(--color-secondary-dark);
 
     --color-background: var(--color-white);
-    --color-link: var(--color-primary);
-    --color-link-hover: var(--color-white);
 
+    
+    --color-link: var(--color-white);
+    --color-link-hover: var(--color-white);
     --color-link-visited: var(--color-primary);
     --color-link-active: var(--color-secondary) ;
     
