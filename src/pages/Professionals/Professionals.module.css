@@ -79,7 +79,8 @@
 
 .card:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-3px);
+  /* below; move card up on hover; uncomment when profiles are clickable */
+  /* transform: translateY(-3px); */ 
 }
 
 /* ── AVATAR ── */
