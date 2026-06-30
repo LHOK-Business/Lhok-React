@@ -1,3 +1,18 @@
+/*
+  Header.jsx — Mobile-first layout structure
+  ─────────────────────────────────────────────
+  MOBILE:   [logo] ············· [hamburger]
+              ↑ flex row, margin-left:auto on hamburger pushes it right
+              nav + login/avatar are display:none in CSS
+
+  DESKTOP (≥768px via CSS):
+            [logo] [── nav ──] [login or avatar]
+              ↑ hamburger becomes display:none in CSS
+
+  The mobile menu is rendered in the React fragment OUTSIDE <header>
+  so it can be position:fixed in CSS without a stacking-context conflict.
+*/
+
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -5,8 +20,10 @@ import { auth } from '../../firebase/config';
 import styles from './Header.module.css';
 import logo from '../../assets/lhoklogo.png';
 
+/* Add new top-level pages here — both desktop nav and mobile menu
+   pick them up automatically. */
 const NAV_ITEMS = [
-  { label: 'Contact Us',              to: '/contact' },
+  { label: 'Contact Us',    to: '/contact' },
   { label: 'Professionals', to: '/professionals' },
 ];
 
@@ -14,15 +31,15 @@ function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
-  // Listen to Firebase auth state — runs once on mount
+  /* Listen to Firebase auth state — runs once on mount, cleans up on unmount */
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
     });
-    return () => unsubscribe(); // cleanup on unmount
+    return () => unsubscribe();
   }, []);
 
-  // Pull initials from displayName or email fallback
+  /* Pull initials from displayName (e.g. "Jane Doe" → "JD"), fall back to email[0] */
   const getInitials = (user) => {
     if (user.displayName) {
       const parts = user.displayName.trim().split(' ');
@@ -33,6 +50,7 @@ function Header() {
     return user.email[0].toUpperCase();
   };
 
+  /* NavLink className helpers — React Router passes { isActive } to the function */
   const getNavLinkClass = ({ isActive }) =>
     isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink;
 
@@ -41,23 +59,24 @@ function Header() {
 
   return (
     <>
+      {/* ── FIXED HEADER BAR ─────────────────────────────────────────────
+          position:fixed is set in CSS (.header). The bar always stays
+          at the top of the viewport during scroll. */}
       <header className={styles.header}>
+
+        {/* ── CONTAINER — flex row ──────────────────────────────────────
+            On mobile:  [logo] + margin-left:auto on hamburger → logo left, hamburger right
+            On desktop: [logo] [nav flex:1] [login/avatar] — hamburger hidden by CSS */}
         <div className={styles.container}>
 
-          {/* ── LOGO ── */}
+          {/* ── LOGO ──────────────────────────────────────────────────── */}
           <Link to="/" className={styles.logoLink}>
-            <span style={{
-              fontFamily: 'var(--font-family-primary)',
-              fontWeight: 'var(--font-weight-bold)',
-              fontSize: 'var(--font-size-subheading)',
-              color: 'var(--color-white)',
-              letterSpacing: '0.15em',
-            }}>
-              <img src={logo} alt="LHOK" className={styles.logoImage} />
-            </span>
+            <img src={logo} alt="LHOK" className={styles.logoImage} />
           </Link>
 
-          {/* ── DESKTOP NAV ── */}
+          {/* ── DESKTOP NAV ───────────────────────────────────────────────
+              CSS: display:none on mobile, display:flex on desktop (≥768px).
+              To add a page: add an entry to NAV_ITEMS at the top of this file. */}
           <nav className={styles.nav}>
             {NAV_ITEMS.map((item) => (
               <NavLink key={item.label} to={item.to} className={getNavLinkClass}>
@@ -66,20 +85,24 @@ function Header() {
             ))}
           </nav>
 
-          {/* ── LOGIN or AVATAR ── */}
+          {/* ── LOGIN or AVATAR (desktop only) ────────────────────────────
+              CSS: display:none on mobile — these appear in the mobile menu instead.
+              Logged in  → circular initials badge → /Dashboard
+              Logged out → outlined Login button  → /login */}
           {currentUser ? (
-            // Logged in — show initials circle linking to /profile
             <Link to="/Dashboard" className={styles.avatarButton}>
               {getInitials(currentUser)}
             </Link>
           ) : (
-            // Logged out — show Login button
             <Link to="/login" className={styles.loginButton}>
               Login
             </Link>
           )}
 
-          {/* ── HAMBURGER ── */}
+          {/* ── HAMBURGER (mobile only) ────────────────────────────────────
+              CSS: display:flex on mobile, display:none on desktop (≥768px).
+              margin-left:auto in CSS pushes it to the right edge.
+              aria-expanded tells screen readers whether the menu is open. */}
           <button
             className={styles.hamburger}
             onClick={() => setIsMobileMenuOpen(prev => !prev)}
@@ -94,9 +117,15 @@ function Header() {
         </div>
       </header>
 
-      {/* ── MOBILE MENU ── */}
+      {/* ── MOBILE MENU ───────────────────────────────────────────────────
+          Rendered outside <header> to avoid stacking-context issues.
+          CSS (.mobileMenu) uses position:fixed + top:var(--header-height)
+          to pin it flush against the bottom of the header bar — no inline
+          style needed here. JSX controls visibility via conditional render. */}
       {isMobileMenuOpen && (
-        <nav className={styles.mobileMenu} style={{ marginTop: 'var(--header-height)' }}>
+        <nav className={styles.mobileMenu}>
+
+          {/* Nav links — close the menu on tap so the page change is smooth */}
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.label}
@@ -108,6 +137,7 @@ function Header() {
             </NavLink>
           ))}
 
+          {/* Login / My Profile at the bottom of the mobile menu */}
           {currentUser ? (
             <Link
               to="/profile"
@@ -125,6 +155,7 @@ function Header() {
               Login
             </Link>
           )}
+
         </nav>
       )}
     </>

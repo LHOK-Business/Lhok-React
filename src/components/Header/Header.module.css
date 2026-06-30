@@ -1,15 +1,25 @@
 /* ============================================
    Header.module.css
    Scoped styles for the site Header.
-   References global variables from index.css — never hardcodes colors or spacing.
+
+   ── MOBILE-FIRST PATTERN (use this as a template for other files) ──
+   1. Write BASE styles for the smallest screen (no media query).
+   2. Add `@media (min-width: 768px)` blocks to ENHANCE for desktop.
+   3. Never use `@media (max-width: …)` — that is desktop-first.
+   4. Things hidden on mobile get `display: none` in the base, then
+      their display value restored inside the min-width query.
+   5. Things hidden on desktop get their display value in the base, then
+      `display: none` inside the min-width query.
+
+   References global variables from index.css — never hardcodes values.
    ============================================ */
 
 
 /* ── OUTER HEADER ─────────────────────────────────────────────
    Fixed to the top of the viewport so it stays visible on scroll.
-   Uses --z-index-fixed so it always sits above page content.
+   --z-index-fixed (1000) keeps it above all page content.
    Height matches --header-height so body padding-top in index.css
-   accounts for it correctly (body already has padding-top: var(--header-height)).
+   accounts for the space it occupies (body { padding-top: var(--header-height) }).
    ────────────────────────────────────────────────────────────*/
 .header {
   position: fixed;
@@ -17,46 +27,59 @@
   left: 0;
   right: 0;
   height: var(--header-height);
-  z-index: var(--z-index-fixed);
+  z-index: var(--z-index-fixed); /* 1000 — always on top */
 
-  /* Purple gradient matching your brand screenshots */
   background: linear-gradient(
-  to bottom,
-  var(--color-primary)      1%,
-  var(--color-white) 100%
+    to bottom,
+    var(--color-primary) 1%,
+    var(--color-white)   100%
   );
-
-
 }
 
 
 /* ── INNER CONTAINER ──────────────────────────────────────────
-   Three-column CSS Grid:
-     [logo]  [nav links]  [login button]
+   Flexbox row that holds every header element side-by-side.
 
-   auto = takes only as much space as content needs
-   1fr  = takes all remaining space (and centers nav inside it)
+   MOBILE (base):
+     Visible items: [logo] ············· [hamburger]
+     margin-left:auto on .hamburger pushes it to the far right
+     when .nav and .loginButton are both display:none.
+
+   DESKTOP (min-width: 768px):
+     Visible items: [logo] [── nav ──] [login or avatar]
+     .nav has flex:1 so it fills the middle and centers its links.
+     .hamburger becomes display:none.
    ────────────────────────────────────────────────────────────*/
 .container {
+  /* ── shared across all breakpoints ── */
   max-width: var(--max-content-width);
   height: 100%;
   margin: 0 auto;
-  padding: 0 var(--spacing-xl);
-
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
+
+  /* Tighter padding on mobile to give content more room */
+  padding: 0 var(--spacing-md);
+  gap: var(--spacing-md);
+}
+
+/* Desktop: increase padding and gap */
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-xl);
+    gap: var(--spacing-lg);
+  }
 }
 
 
 /* ── LOGO ─────────────────────────────────────────────────────
-   Sized by --logo-height-header from your global variables.
-   Wrapped in a Link so clicking it goes back to home.
+   Visible on both mobile and desktop — no media query needed.
+   Wrapped in a <Link> so clicking it navigates home.
    ────────────────────────────────────────────────────────────*/
 .logoLink {
   display: flex;
   align-items: center;
+  /* No flex-grow — logo never stretches */
 }
 
 .logoImage {
@@ -65,35 +88,46 @@
 }
 
 
-/* ── NAV ──────────────────────────────────────────────────────
-   Sits in the center column, spreads links evenly.
+/* ── DESKTOP NAV ──────────────────────────────────────────────
+   MOBILE (base): display:none — navigation lives inside the
+     hamburger menu instead.
+   DESKTOP (min-width: 768px): display:flex — shown as a centered
+     row of links between the logo and the login button.
+
+   flex:1 fills the space between logo and login/avatar.
+   justify-content:center visually centers the links within that space.
    ────────────────────────────────────────────────────────────*/
 .nav {
-  display: flex;
+  display: none; /* MOBILE: hidden */
+
+  /* These properties become active when display is restored below */
+  flex: 1;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-xl);
 }
 
+@media (min-width: 768px) {
+  .nav {
+    display: flex; /* DESKTOP: visible */
+  }
+}
+
 
 /* ── NAV LINKS ────────────────────────────────────────────────
-   White text with a frosted pill highlight on hover.
-   The pill is created by background-color + border on the <a> itself —
-   no extra wrapper element needed.
-
-   border: 1px solid transparent is set by default so the layout
-   doesn't shift by 1px when the border appears on hover.
+   Shared between desktop nav and the active-state class.
+   border: 1px solid transparent prevents a 1px layout shift
+   when the visible border appears on hover or active state.
    ────────────────────────────────────────────────────────────*/
 .navLink {
   font-family: var(--font-family-primary);
   font-size: var(--font-size-body);
   font-weight: var(--font-weight-medium);
-  color:grey;
+  color: grey;
 
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--border-radius-lg);
-  border: 1px solid transparent;
-
+  border: 1px solid transparent; /* reserves space so hover doesn't shift layout */
 
   transition:
     background-color var(--transition-speed-fast) var(--transition-easing),
@@ -105,11 +139,11 @@
 .navLink:hover {
   background-color: rgba(255, 255, 255, 0.18);
   border-color: rgba(255, 255, 255, 0.35);
-  color: var(--color-primary-dark);   /* override global a:hover color */
-  text-decoration: none;        /* override global a:hover underline */
+  color: var(--color-primary-dark);
+  text-decoration: none;
 }
 
-/* Active page link — pill always visible so user knows where they are */
+/* Active page — pill always visible so user knows current location */
 .navLinkActive {
   background-color: rgba(255, 255, 255, 0.22);
   border-color: rgba(255, 255, 255, 0.40);
@@ -118,10 +152,15 @@
 
 
 /* ── LOGIN BUTTON ─────────────────────────────────────────────
-   Outlined style (white border) — fills white on hover,
-   text flips to brand purple.
+   MOBILE (base): display:none — login is in the mobile menu.
+   DESKTOP (min-width: 768px): display:inline-flex — shown in the
+     header on the right side.
+
+   Outlined style — fills white on hover, text flips to brand purple.
    ────────────────────────────────────────────────────────────*/
 .loginButton {
+  display: none; /* MOBILE: hidden */
+
   font-family: var(--font-family-primary);
   font-size: var(--font-size-body);
   font-weight: var(--font-weight-bold);
@@ -138,6 +177,13 @@
   white-space: nowrap;
 }
 
+@media (min-width: 768px) {
+  .loginButton {
+    display: inline-flex; /* DESKTOP: visible */
+    align-items: center;
+  }
+}
+
 .loginButton:hover {
   background-color: var(--color-white);
   color: var(--color-primary);
@@ -145,95 +191,17 @@
 }
 
 
-/* ── MOBILE HAMBURGER ─────────────────────────────────────────
-   Hidden on desktop. Three white lines as a button.
-   ────────────────────────────────────────────────────────────*/
-.hamburger {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  padding: var(--spacing-xs);
-}
-
-.hamburgerLine {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background-color: var(--color-white);
-  border-radius: 2px;
-  transition: opacity var(--transition-speed-fast) var(--transition-easing);
-}
-
-
-/* ── MOBILE DROPDOWN MENU ─────────────────────────────────────
-   Drops below the fixed header when hamburger is clicked.
-   Conditionally rendered in JSX — display:flex when open.
-   ────────────────────────────────────────────────────────────*/
-.mobileMenu {
-  display: flex;
-  flex-direction: column;
-  padding: var(--spacing-sm) var(--spacing-xl) var(--spacing-md);
-  background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.mobileNavLink {
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-body);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-white);
-  padding: var(--spacing-sm) 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  text-align: left;
-  transition: opacity var(--transition-speed-fast) var(--transition-easing);
-}
-
-.mobileNavLink:hover {
-  opacity: 0.75;
-  text-decoration: none;
-}
-
-.mobileLoginButton {
-  font-family: var(--font-family-primary);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-white);
-  border: var(--border-width) solid var(--color-white);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-sm) var(--spacing-md);
-  margin-top: var(--spacing-md);
-  text-align: center;
-  transition:
-    background-color var(--transition-speed-fast) var(--transition-easing),
-    color            var(--transition-speed-fast) var(--transition-easing);
-}
-
-.mobileLoginButton:hover {
-  background-color: var(--color-white);
-  color: var(--color-primary);
-  text-decoration: none;
-}
-
-
-/* ── RESPONSIVE ───────────────────────────────────────────────
-   Below 768px: hide desktop nav and login, show hamburger
-   ────────────────────────────────────────────────────────────*/
-@media (max-width: 768px) {
-  .nav,
-  .loginButton {
-    display: none;
-  }
-
-  .hamburger {
-    display: flex;
-  }
-}
 /* ── AVATAR BUTTON ────────────────────────────────────────────
-   Circular initials badge — replaces Login when user is signed in.
-   Same sizing as loginButton so the header layout doesn't shift.
+   Replaces .loginButton when the user is signed in.
+   Circular badge showing the user's initials, links to /Dashboard.
+
+   MOBILE (base): display:none — handled by the mobile menu.
+   DESKTOP (min-width: 768px): display:flex — shown in the header.
    ────────────────────────────────────────────────────────────*/
 .avatarButton {
-  display: flex;
+  display: none; /* MOBILE: hidden */
+
+  /* These activate when display:flex is applied below */
   align-items: center;
   justify-content: center;
 
@@ -256,8 +224,118 @@
   white-space: nowrap;
 }
 
+@media (min-width: 768px) {
+  .avatarButton {
+    display: flex; /* DESKTOP: visible */
+  }
+}
+
 .avatarButton:hover {
   background-color: var(--color-primary);
   color: var(--color-white);
+  text-decoration: none;
+}
+
+
+/* ── HAMBURGER ────────────────────────────────────────────────
+   MOBILE (base): display:flex — visible, toggles the mobile menu.
+   DESKTOP (min-width: 768px): display:none — desktop nav is used.
+
+   margin-left:auto pushes the button to the far right of the flex
+   row when .nav and .loginButton are hidden on mobile.
+   ────────────────────────────────────────────────────────────*/
+.hamburger {
+  display: flex; /* MOBILE: visible */
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: var(--spacing-xs);
+  margin-left: auto; /* pushes to the right edge when nav + login are hidden */
+
+  /* Reset <button> browser defaults */
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .hamburger {
+    display: none; /* DESKTOP: hidden */
+  }
+}
+
+.hamburgerLine {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-white);
+  border-radius: 2px;
+  transition: opacity var(--transition-speed-fast) var(--transition-easing);
+}
+
+
+/* ── MOBILE DROPDOWN MENU ─────────────────────────────────────
+   Appears below the fixed header when the hamburger is clicked.
+   JSX conditionally renders this element; CSS handles position + style.
+
+   position:fixed + top:var(--header-height) pins it directly below
+   the header bar regardless of how far the page is scrolled.
+
+   z-index:var(--z-index-dropdown) (100) keeps it above page content
+   but well below the header bar (--z-index-fixed = 1000).
+
+   No desktop styles needed — the hamburger that triggers this is
+   already hidden on desktop.
+   ────────────────────────────────────────────────────────────*/
+.mobileMenu {
+  position: fixed;                   /* stays below the header even when scrolled */
+  top: var(--header-height);         /* flush against the bottom edge of the header */
+  left: 0;
+  right: 0;
+  z-index: var(--z-index-dropdown);  /* 100: above content, below header (1000) */
+
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-sm) var(--spacing-xl) var(--spacing-md);
+
+  background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Each nav item in the mobile menu */
+.mobileNavLink {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* subtle separator */
+  text-align: left;
+  transition: opacity var(--transition-speed-fast) var(--transition-easing);
+}
+
+.mobileNavLink:hover {
+  opacity: 0.75;
+  text-decoration: none;
+}
+
+/* Login / "initials — My Profile" button at the bottom of the mobile menu */
+.mobileLoginButton {
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  border: var(--border-width) solid var(--color-white);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-top: var(--spacing-md); /* separates it from the nav link list */
+  text-align: center;
+  transition:
+    background-color var(--transition-speed-fast) var(--transition-easing),
+    color            var(--transition-speed-fast) var(--transition-easing);
+}
+
+.mobileLoginButton:hover {
+  background-color: var(--color-white);
+  color: var(--color-primary);
   text-decoration: none;
 }
