@@ -83,8 +83,14 @@
 }
 
 .logoImage {
-  height: var(--logo-height-header);
-  width: auto; /* preserve aspect ratio */
+  height: 56px; /* ← your new bigger mobile size */
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .logoImage {
+    height: var(--logo-height-header); /* ← back to the original variable on desktop */
+  }
 }
 
 
