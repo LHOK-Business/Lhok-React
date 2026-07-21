@@ -6,6 +6,10 @@
 .page {
   min-height: 100%;
   padding: var(--spacing-xl);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* centers content vertically so the gap to the header and footer stays equal */
 }
 
 /* ── CONTAINER ── */
@@ -26,10 +30,15 @@
   margin: 0 auto;
 }
 
+.textSection h1 {
+  text-align: center;
+}
+
 .textList {
   list-style: none;
   padding: 0;
   margin: var(--spacing-md) 0;
+  text-align: left;
 }
 
 .textList li {
@@ -39,8 +48,9 @@
 
 /* ── CTA BUTTON ── */
 .ctaButton {
-  display: inline-block;
-  margin-top: var(--spacing-md);
+  display: block;
+  width: fit-content;
+  margin: var(--spacing-md) auto 0;
 
   background-color: var(--color-primary);
   color: var(--color-white);

@@ -58,7 +58,7 @@ body {
     display: flex;
     flex-direction: column;
 
-    padding-top: var(--header-height); /* pushes ALL page content below the fixed header */
+    padding-top: calc(var(--header-height) + var(--spacing-md)); /* pushes ALL page content below the fixed header, plus extra gap */
     /* Typography */
     font-family: var(--font-family-primary);
     font-size: var(--font-size-body);
@@ -196,4 +196,8 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+main {
+  flex: 1;
 }

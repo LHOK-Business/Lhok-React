@@ -42,7 +42,7 @@ function App() {
         <HashRouter>
             <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <Header />
-            <main style={{ flex: 1 }}>
+            <main>
                 <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/about"   element={<About />} />

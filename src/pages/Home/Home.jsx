@@ -52,8 +52,8 @@ function Landing() {
   }, []);
 
   return (
-    <main className={styles.page}>
-      
+    <div className={styles.page}>
+
       <div className={styles.container}>
 
         {/* ── LEFT SIDE (TEXT) ── */}
@@ -61,12 +61,11 @@ function Landing() {
           <h1>Join Lhok Today</h1>
 
           <ul className={styles.textList}>
-            <li>Welcome to Lhok!</li>
-            <li>More than a platform, Lhok is a community.</li>
-            <li>Connecting beauty professionals across the GTA.</li>
-            <li>Collaborate, grow, and succeed together.</li>
-            <li>Build your presence and connect with clients.</li>
-            <li>Join the community and grow with us.</li>
+            <li>Tired of scrolling endless hashtags and DMing pros who never write back?</li>
+            <li>Lhok makes finding a real, local beauty professional as simple as a search by service, by location, no algorithm, no guesswork. </li>
+            <li>We're building this because we felt that frustration ourselves, and we knew there had to be a better way.</li>
+            <li>Clients, join us and be first to search when we launch. </li>
+            <li>Beauty professionals, join us early your spot on Lhok is free and based on the services you offer, not content or views. </li>
           </ul>
 
           <Link to="/login" className={styles.ctaButton}>
@@ -92,7 +91,7 @@ function Landing() {
 
       </div>
 
-    </main>
+    </div>
   );
 }
 
