@@ -131,7 +131,7 @@
   flex-direction: column;
   gap: var(--spacing-sm);
 
-  animation: scrollVertical 55s linear infinite;
+  animation: scrollVertical 134s linear infinite;
 
   /* Pause animation on hover */
   /* Stops the whole scroll when hovering anywhere in the wrapper */

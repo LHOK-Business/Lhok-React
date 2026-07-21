@@ -7,10 +7,16 @@ import { Link } from 'react-router-dom';
 import styles from './Home.module.css';
 
 // Import images (adjust paths as needed)
-import img1 from '../../assets/image1.jpg';
-import img2 from '../../assets/image2.jpg';
-import img3 from '../../assets/image3.jpg';
-import img4 from '../../assets/image4.jpg';
+import img1 from '../../assets/1.png';
+import img2 from '../../assets/2.png';
+import img3 from '../../assets/3.png';
+import img4 from '../../assets/4.png';
+import img5 from '../../assets/5.png';
+import img6 from '../../assets/6.png';
+import img7 from '../../assets/7.png';
+import img8 from '../../assets/8.png';
+import img9 from '../../assets/9.png';
+import img10 from '../../assets/10.png';
 
 function Landing() {
   const imageGridRef = useRef(null);
@@ -75,6 +81,12 @@ function Landing() {
             <img src={img2} alt="Beauty service 2" />
             <img src={img3} alt="Beauty service 3" />
             <img src={img4} alt="Beauty service 4" />
+            <img src={img5} alt="Beauty service 5" />
+            <img src={img6} alt="Beauty service 6" />
+            <img src={img7} alt="Beauty service 7" />
+            <img src={img8} alt="Beauty service 8" />
+            <img src={img9} alt="Beauty service 9" />
+            <img src={img10} alt="Beauty service 10" />
           </div>
         </div>
 
