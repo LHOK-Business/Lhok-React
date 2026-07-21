@@ -93,6 +93,10 @@
     transform var(--transition-speed-fast) var(--transition-easing);
 }
 
+.ctaButton:visited {
+  color: var(--color-white);
+}
+
 .ctaButton:hover {
   background-color: var(--color-primary-dark);
   transform: translateY(-1px);

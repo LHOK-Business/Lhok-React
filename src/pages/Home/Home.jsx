@@ -62,10 +62,10 @@ function Landing() {
 
           <ul className={styles.textList}>
             <li>Tired of scrolling endless hashtags and DMing pros who never write back?</li>
-            <li>Lhok makes finding a real, local beauty professional as simple as a search by service, by location, no algorithm, no guesswork. </li>
+            <li><strong>Lhok makes finding a real, local beauty professional as simple as a search by service, by location, no algorithm, no guesswork.</strong> </li>
             <li>We're building this because we felt that frustration ourselves, and we knew there had to be a better way.</li>
-            <li>Clients, join us and be first to search when we launch. </li>
-            <li>Beauty professionals, join us early your spot on Lhok is free and based on the services you offer, not content or views. </li>
+            <li><strong>Clients</strong>, join us and be first to search when we launch. </li>
+            <li><strong>Beauty professionals</strong>, join us early your spot on Lhok is free and based on the services you offer, not content or views. </li>
           </ul>
 
           <Link to="/login" className={styles.ctaButton}>

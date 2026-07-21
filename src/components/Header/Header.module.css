@@ -190,6 +190,10 @@
   }
 }
 
+.loginButton:visited {
+  color: var(--color-white);
+}
+
 .loginButton:hover {
   background-color: var(--color-white);
   color: var(--color-primary);
@@ -234,6 +238,10 @@
   .avatarButton {
     display: flex; /* DESKTOP: visible */
   }
+}
+
+.avatarButton:visited {
+  color: var(--color-primary-dark);
 }
 
 .avatarButton:hover {
@@ -338,6 +346,10 @@
   transition:
     background-color var(--transition-speed-fast) var(--transition-easing),
     color            var(--transition-speed-fast) var(--transition-easing);
+}
+
+.mobileLoginButton:visited {
+  color: var(--color-white);
 }
 
 .mobileLoginButton:hover {
