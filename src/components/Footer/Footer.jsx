@@ -126,7 +126,7 @@ function Footer() {
             <div className={styles.column}>
               <h3 className={styles.columnHeading}>Get Started</h3>
               <Link to="/login" className={styles.ctaButton}>
-                Start Lhoking
+                Join Lhok
               </Link>
             </div>
 

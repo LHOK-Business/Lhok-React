@@ -165,8 +165,8 @@ function Professionals() {
     <div className={styles.page}>
 
       <div className={styles.pageHeader}>
-        <h1 className={styles.title}>Our Community</h1>
-        <p className={styles.subtitle}>Meet our amazing members</p>
+        <h1 className={styles.title}>Start Lhoking</h1>
+        <p className={styles.subtitle}>Available professionals</p>
       </div>
 
       {loading && (
