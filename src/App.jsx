@@ -21,10 +21,11 @@
 
 import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
+//Components
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-
-
+import MobileTabBar from './components/MobileTabBar/MobileTabBar';
+// Pages
 import About   from './pages/About/About';
 import Contact from './pages/Contact/Contact';
 import Home    from './pages/Home/Home';
@@ -58,6 +59,7 @@ function App() {
                 </Routes>
             </main>
             <Footer />
+            <MobileTabBar />
             </div>
         </HashRouter>
     );

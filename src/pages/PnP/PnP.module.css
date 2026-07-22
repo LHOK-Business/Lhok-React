@@ -1,12 +1,27 @@
+/* ============================================
+   PnP.module.css
+   Scoped styles for the Privacy Policy page.
+
+   ── MOBILE-FIRST STATUS: Already compliant ──
+   This layout has no breakpoints because it doesn't need any.
+   `max-width: 800px` + `width: 100%` is a fluid pattern:
+     - On mobile, .container fills the available width (100%),
+       so the layout is already "mobile" by default.
+     - On wider screens, it stops growing at 800px and centers,
+       via `justify-content: center` on .page.
+   There's no discrete desktop-only style to layer in with
+   `min-width`, so no @media block is needed.
+   ============================================ */
+
 .page {
   display: flex;
-  justify-content: center;
+  justify-content: center; /* centers .container once it hits its max-width */
   padding: var(--spacing-xl);
 }
 
 .container {
-  max-width: 800px;
-  width: 100%;
+  max-width: 800px; /* content never grows wider than this, on any screen */
+  width: 100%;       /* fills available width below 800px — this is what makes it mobile-safe */
   text-align: left;
 }
 
